@@ -2,7 +2,7 @@ import LoginForm from "../../Auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-100 to-amber-50 flex flex-col items-center pt-12 pb-6 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-100 to-amber-50 flex flex-col items-center  pb-6 px-4 sm:px-6 lg:px-8">
       {/* Form positioned at the top */}
       <div className="w-full sm:max-w-md mb-12">
         <LoginForm />
