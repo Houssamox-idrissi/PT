@@ -9,11 +9,11 @@ export default function Footer() {
             <div className="lg:col-span-2">
               <div className="flex items-center mb-4">
                 <img 
-                  src="/logo-white.png" 
+                  src="/logo.png" 
                   alt="Voyageur Logo" 
-                  className="h-8 w-auto"
+                  className="h-14 w-auto"
                 />
-                <span className="ml-2 text-xl font-bold text-white">Voyageur</span>
+                <span className="ml-2 text-xl font-bold text-white">Holi Square</span>
               </div>
               <p className="text-gray-400 mb-6">
                 Redefining travel experiences through exceptional accommodations worldwide.

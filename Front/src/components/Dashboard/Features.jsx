@@ -1,48 +1,96 @@
+import { motion } from 'framer-motion';
+import { FiCheckCircle, FiHeadphones, FiCalendar } from 'react-icons/fi';
+
 export default function Features() {
-    const features = [
-      {
-        name: 'Verified Properties',
-        description: 'All listings are carefully vetted to ensure quality',
-        icon: '✅'
-      },
-      {
-        name: '24/7 Support',
-        description: 'Our team is always available to assist you',
-        icon: '📞'
-      },
-      {
-        name: 'Easy Booking',
-        description: 'Simple and secure booking process',
-        icon: '📅'
+  const features = [
+    {
+      name: 'Verified Properties',
+      description: 'All listings are carefully vetted to ensure quality',
+      icon: <FiCheckCircle className="h-6 w-6" />
+    },
+    {
+      name: '24/7 Support',
+      description: 'Our team is always available to assist you',
+      icon: <FiHeadphones className="h-6 w-6" />
+    },
+    {
+      name: 'Easy Booking',
+      description: 'Simple and secure booking process',
+      icon: <FiCalendar className="h-6 w-6" />
+    }
+  ];
+
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
       }
-    ];
-  
-    return (
-      <div className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-              Why Choose Voyageur
-            </h2>
-          </div>
-          <div className="mt-10">
-            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              {features.map((feature) => (
-                <div key={feature.name} className="text-center">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mx-auto text-xl">
-                    {feature.icon}
-                  </div>
-                  <div className="mt-5">
-                    <h3 className="text-lg font-medium text-gray-900">{feature.name}</h3>
-                    <p className="mt-2 text-base text-gray-500">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+    }
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  return (
+    <div className="py-16 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="lg:text-center mb-16"
+        >
+          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            Why Choose Holi Square 
+          </h2>
+          <p className="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
+            Premium features for your perfect stay
+          </p>
+        </motion.div>
+
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {features.map((feature) => (
+            <motion.div
+              key={feature.name}
+              variants={item}
+              whileHover={{ y: -5 }}
+              className="group"
+            >
+              <div className="relative bg-white p-8 rounded-xl shadow-lg border border-gray-100 h-full transition-all duration-300 group-hover:shadow-xl">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="flex items-center justify-center h-16 w-16 rounded-full bg-orange-500 text-white mx-auto mb-6"
+                >
+                  {feature.icon}
+                </motion.div>
+                <h3 className="text-xl font-semibold text-gray-900 text-center mb-3">
+                  {feature.name}
+                </h3>
+                <p className="text-gray-600 text-center">
+                  {feature.description}
+                </p>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
-    );
-  }
+    </div>
+  );
+}

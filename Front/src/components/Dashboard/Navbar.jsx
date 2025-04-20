@@ -67,7 +67,7 @@ export default function Navbar() {
 
             {/* User Actions */}
             <div className="hidden md:flex md:items-center md:space-x-4">
-              <Link to="/host" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium rounded-md transition-colors">
+              <Link to="/HostLogin" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium rounded-md transition-colors">
                 Become a Host
               </Link>
             <UserDropdown></UserDropdown>

@@ -11,7 +11,6 @@ export default function HomePage() {
       <Navbar></Navbar>
       <PropertiesGrid />
       <Features />
-      <Testimonials />
       <Footer/>
     </div>
   );
