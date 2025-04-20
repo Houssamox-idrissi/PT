@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { FiUser, FiLogIn, FiHome, FiHelpCircle, FiGlobe, FiStar, FiHeart, FiSettings, FiLogOut } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,14 +40,14 @@ export default function UserDropdown() {
           </div>
 
           <div className="py-1">
-            <button className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+            <Link to="/loginVoyageure" className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
               <FiLogIn className="mr-3 text-orange-500" />
               <span>Login as Voyageur</span>
-            </button>
-            <button className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+            </Link>
+            <Link to="/HostLogin" className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
               <FiHome className="mr-3 text-orange-500" />
               <span>Become a Host</span>
-            </button>
+            </Link>
           </div>
 
           {/* Separator */}
