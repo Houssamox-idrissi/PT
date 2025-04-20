@@ -4,7 +4,7 @@ export default function HeroSection() {
         <div className="absolute inset-0">
           <img
             className="w-full h-full object-cover opacity-50"
-            src="/hero-bg.jpg"
+            src="/hh.jpg"
             alt="Beautiful travel destination"
           />
         </div>
@@ -19,10 +19,10 @@ export default function HeroSection() {
             <div className="relative max-w-md">
               <input
                 type="text"
-                className="block w-full rounded-md border-transparent py-3 px-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="block w-full text-white rounded-md border-transparent py-3 px-4 text-base focus:outline-none focus:ring-2 focus:ring"
                 placeholder="Search destinations..."
               />
-              <button className="absolute right-1.5 top-1.5 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+              <button className="absolute right-1.5 top-1.5 bg-black  text-white py-2 px-4 rounded-md">
                 Search
               </button>
             </div>

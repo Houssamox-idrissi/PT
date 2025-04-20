@@ -1,8 +1,14 @@
-export default function DashboardPage(){
+import Navbar from "../Dashboard/Navbar";
+
+export default function DashboardPage() {
 
 
-    return(
-        <h1>hello</h1>
+    return (
+
+        <div>
+            <Navbar></Navbar>
+        </div>
+
     )
 }
 
