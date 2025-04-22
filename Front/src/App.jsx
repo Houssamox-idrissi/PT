@@ -8,7 +8,7 @@ import HostLoginPage from './pages/HostAuth/HostPageLogin.jsx';
 
 import MainLayout from './layouts/MainLayout.jsx';
 import HomePage from './pages/HomePage/HomePage';
-import BecomeHost from './pages/BecomeHost.jsx';
+import BecomeHost from './pages/HostPages/BecomeHost.jsx';
 
 
 export default function App() {
