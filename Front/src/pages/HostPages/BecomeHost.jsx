@@ -83,7 +83,7 @@ export default function BecomeHost() {
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-8 py-4 flex justify-end">
           <Link
-            to="/host/create"
+            to="/About-your-place"
             className="bg-black text-white px-6 py-3 rounded-lg font-medium text-base hover:bg-gray-800 transition-colors"
           >
             Commencer

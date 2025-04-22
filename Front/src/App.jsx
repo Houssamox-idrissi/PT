@@ -9,6 +9,7 @@ import HostLoginPage from './pages/HostAuth/HostPageLogin.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import HomePage from './pages/HomePage/HomePage';
 import BecomeHost from './pages/HostPages/BecomeHost.jsx';
+import AboutPlace from './pages/HostPages/AboutPlace.jsx';
 
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/HostRegistration" element={<HostRegistrationForm />} />
         <Route path="/HostLogin" element={<HostLoginPage />} />
         <Route path="/BecomeHost" element={<BecomeHost />} />
+        <Route path="/About-your-place" element={<AboutPlace />} />
         <Route index element={<HomePage />} />
       </Routes>
     </Router>
