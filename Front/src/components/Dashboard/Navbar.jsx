@@ -28,43 +28,52 @@ export default function Navbar({ onSearch }) {
       {/* Top Navigation Bar */}
       <nav className={`bg-white transition-all duration-300 ${scrolled ? 'shadow-md' : 'shadow-sm'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`flex justify-between h-22 items-center transition-all duration-300 ${scrolled ? 'py-1' : 'py-2'}`}>
+          <div className={`flex justify-between items-center transition-all duration-300 ${scrolled ? 'h-16' : 'h-24'}`}>
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0 flex items-center">
                 <img
-                  className={`transition-all duration-300 ${scrolled ? 'h-10' : 'h-12'}`}
+                  className={`transition-all duration-300 ${scrolled ? 'h-8' : 'h-12'}`}
                   src="/logo.png"
                   alt="Logo"
                 />
-                <span className={`ml-2 font-bold text-orange-500 hidden sm:block transition-all duration-300 ${scrolled ? 'text-xl' : 'text-2xl'}`}>
+                <span className={`ml-2 font-bold text-orange-500 hidden sm:block transition-all duration-300 ${scrolled ? 'text-lg' : 'text-2xl'}`}>
                   Holi Square
                 </span>
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex md:items-center md:space-x-4">
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `px-3 py-2 text-xl font-medium rounded-md transition-colors ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
-                  }`
-                }
-              >
-                Logements
-              </NavLink>
+            {/* Search Bar when scrolled */}
+            {scrolled && (
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-full max-w-2xl">
+                <SearchBar onSearch={onSearch} scrolled={scrolled} />
+              </div>
+            )}
 
-              <NavLink
-                to="/destinations"
-                className={({ isActive }) =>
-                  `px-3 py-2 text-xl font-medium rounded-md transition-colors ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
-                  }`
-                }
-              >
-                Activités
-              </NavLink>
-            </div>
+            {/* Desktop Navigation - Hidden when scrolled */}
+            {!scrolled && (
+              <div className="hidden md:flex md:items-center md:space-x-4">
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `px-3 py-2 text-xl font-medium rounded-md transition-colors ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
+                    }`
+                  }
+                >
+                  Logements
+                </NavLink>
+
+                <NavLink
+                  to="/destinations"
+                  className={({ isActive }) =>
+                    `px-3 py-2 text-xl font-medium rounded-md transition-colors ${isActive ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
+                    }`
+                  }
+                >
+                  Activités
+                </NavLink>
+              </div>
+            )}
 
             {/* User Actions */}
             <div className="hidden md:flex md:items-center md:space-x-4">
@@ -98,7 +107,9 @@ export default function Navbar({ onSearch }) {
             </div>
           </div>
         )}
-        <SearchBar onSearch={onSearch} />
+        
+        {/* Search Bar when not scrolled */}
+        {!scrolled && <SearchBar onSearch={onSearch} scrolled={scrolled} />}
       </nav>
     </div>
   );

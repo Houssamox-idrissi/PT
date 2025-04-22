@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSearch, FiMapPin, FiCalendar, FiUsers, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiSearch, FiMapPin, FiCalendar, FiUsers, FiChevronDown, FiChevronUp, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import DatePicker from 'react-datepicker';
+import fr from 'date-fns/locale/fr';
 import 'react-datepicker/dist/react-datepicker.css';
+import '../../styles/calendar.css';
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar({ onSearch, scrolled }) {
   const [activeField, setActiveField] = useState(null);
   const [where, setWhere] = useState('');
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [guests, setGuests] = useState(1);
   const [showCalendar, setShowCalendar] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -25,14 +26,10 @@ export default function SearchBar({ onSearch }) {
   };
 
   // Handle date selection
-  const handleDateChange = (dates) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-    if (start && end) {
-      setShowCalendar(false);
-      setActiveField(null);
-    }
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setShowCalendar(false);
+    setActiveField(null);
   };
 
   // Handle guest count changes
@@ -43,11 +40,14 @@ export default function SearchBar({ onSearch }) {
     }
   };
 
-  // Format date range display
-  const formatDateRange = () => {
-    if (!startDate) return 'Any week';
-    if (!endDate) return startDate.toLocaleDateString();
-    return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+  // Format date display
+  const formatDate = () => {
+    if (!selectedDate) return 'Sélectionner une date';
+    return selectedDate.toLocaleDateString('fr', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
   };
 
   // Close all dropdowns when clicking outside
@@ -70,8 +70,7 @@ export default function SearchBar({ onSearch }) {
     // Create search parameters object
     const searchParams = {
       location: where,
-      startDate: startDate ? startDate.toISOString() : null,
-      endDate: endDate ? endDate.toISOString() : null,
+      date: selectedDate ? selectedDate.toISOString() : null,
       guests: guests
     };
 
@@ -82,27 +81,62 @@ export default function SearchBar({ onSearch }) {
     setIsSearching(false);
   };
 
+  // Custom header for the date picker with month/year navigation
+  const CustomHeader = ({
+    date,
+    decreaseMonth,
+    increaseMonth,
+    prevMonthButtonDisabled,
+    nextMonthButtonDisabled,
+  }) => (
+    <div className="flex items-center justify-between px-2 py-2">
+      <button
+        onClick={decreaseMonth}
+        disabled={prevMonthButtonDisabled}
+        className="p-1 hover:bg-gray-100 rounded-full disabled:opacity-50"
+        type="button"
+      >
+        <FiChevronLeft className="w-5 h-5" />
+      </button>
+
+      <h2 className="text-lg font-semibold">
+        {date.toLocaleString('fr', { month: 'long', year: 'numeric' })}
+      </h2>
+
+      <button
+        onClick={increaseMonth}
+        disabled={nextMonthButtonDisabled}
+        className="p-1 hover:bg-gray-100 rounded-full disabled:opacity-50"
+        type="button"
+      >
+        <FiChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+
   return (
-    <div className="flex justify-center items-center min-h-[130px] px-4">
-      <div className="w-full max-w-4xl">
+    <div className={`flex justify-center items-center transition-all duration-300 ${scrolled ? 'py-0' : 'py-4'}`}>
+      <div className={`w-full transition-all duration-300 ${scrolled ? 'scale-100' : 'max-w-3xl scale-100'}`}>
         <div className="relative" ref={containerRef}>
           {/* Main search container */}
-          <div className="bg-white rounded-full shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl">
+          <div className={`bg-white rounded-full shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl`}>
             <div className="flex flex-col md:flex-row items-center">
               {/* Where */}
               <div
-                className={`search-field flex-1 w-full p-4 border-b md:border-b-0 md:border-r border-gray-200 transition-all duration-200 ${activeField === 'where' ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
+                className={`search-field flex-1 w-full ${scrolled ? 'p-2' : 'p-4'} border-b md:border-b-0 md:border-r border-gray-200 transition-all duration-200 ${activeField === 'where' ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
                 onClick={() => toggleField('where')}
               >
                 <div className="flex items-center">
-                  <FiMapPin className="text-gray-500 mr-3" size={18} />
+                  <FiMapPin className={`text-gray-500 mr-2 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-base'}`} />
                   <div className="w-full">
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Where</div>
+                    <div className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 transition-all duration-300 ${scrolled ? 'hidden' : 'block'}`}>
+                      Destination
+                    </div>
                     <div className="flex items-center justify-between">
                       <input
                         type="text"
-                        className="text-left w-full text-sm font-medium text-gray-800 bg-transparent border-none outline-none placeholder-gray-400"
-                        placeholder="Search destinations"
+                        className={`text-left w-full bg-transparent border-none outline-none placeholder-gray-400 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-sm'}`}
+                        placeholder="Rechercher une destination"
                         value={where}
                         onChange={(e) => setWhere(e.target.value)}
                         onClick={(e) => e.stopPropagation()}
@@ -115,16 +149,18 @@ export default function SearchBar({ onSearch }) {
 
               {/* When */}
               <div
-                className={`search-field flex-1 w-full p-4 border-b md:border-b-0 md:border-r border-gray-200 transition-all duration-200 ${activeField === 'when' ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
+                className={`search-field flex-1 w-full ${scrolled ? 'p-2' : 'p-4'} border-b md:border-b-0 md:border-r border-gray-200 transition-all duration-200 ${activeField === 'when' ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
                 onClick={() => toggleField('when')}
               >
                 <div className="flex items-center">
-                  <FiCalendar className="text-gray-500 mr-3" size={18} />
+                  <FiCalendar className={`text-gray-500 mr-2 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-base'}`} />
                   <div className="w-full">
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">When</div>
+                    <div className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 transition-all duration-300 ${scrolled ? 'hidden' : 'block'}`}>
+                      Quand ?
+                    </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-800">
-                        {formatDateRange()}
+                      <span className={`text-gray-800 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-sm'}`}>
+                        {formatDate()}
                       </span>
                       {activeField === 'when' ? <FiChevronUp className="text-gray-400" /> : <FiChevronDown className="text-gray-400" />}
                     </div>
@@ -134,16 +170,18 @@ export default function SearchBar({ onSearch }) {
 
               {/* Who */}
               <div
-                className={`search-field flex-1 w-full p-4 transition-all duration-200 ${activeField === 'who' ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
+                className={`search-field flex-1 w-full ${scrolled ? 'p-2' : 'p-4'} transition-all duration-200 ${activeField === 'who' ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
                 onClick={() => toggleField('who')}
               >
                 <div className="flex items-center">
-                  <FiUsers className="text-gray-500 mr-3" size={18} />
+                  <FiUsers className={`text-gray-500 mr-2 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-base'}`} />
                   <div className="w-full">
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Who</div>
+                    <div className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 transition-all duration-300 ${scrolled ? 'hidden' : 'block'}`}>
+                      Voyageurs
+                    </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-800">
-                        {guests} guest{guests !== 1 ? 's' : ''}
+                      <span className={`text-gray-800 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-sm'}`}>
+                        Ajouter des voyageurs
                       </span>
                       {activeField === 'who' ? <FiChevronUp className="text-gray-400" /> : <FiChevronDown className="text-gray-400" />}
                     </div>
@@ -152,12 +190,13 @@ export default function SearchBar({ onSearch }) {
               </div>
 
               {/* Search Button */}
-              <div className="p-2">
+              <div className={`${scrolled ? 'p-1' : 'p-2'}`}>
                 <button
                   onClick={handleSearch}
-                  className="p-3 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full text-white hover:from-orange-600 hover:to-pink-600 transition-all duration-200"
+                  className={`${scrolled ? 'p-2' : 'p-3'} bg-gradient-to-r from-orange-500 to-pink-500 rounded-full text-white hover:from-orange-600 hover:to-pink-600 transition-all duration-200 flex items-center`}
                 >
-                  <FiSearch size={20} />
+                  <FiSearch size={scrolled ? 16 : 20} />
+                  <span className=""></span>
                 </button>
               </div>
             </div>
@@ -165,30 +204,34 @@ export default function SearchBar({ onSearch }) {
 
           {/* Date Picker Dropdown */}
           {showCalendar && activeField === 'when' && (
-            <div className="absolute z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200">
+            <div className={`absolute z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200 transition-all duration-300 ${scrolled ? 'right-0' : ''}`}>
               <DatePicker
-                selected={startDate}
+                selected={selectedDate}
                 onChange={handleDateChange}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange
                 inline
+                locale={fr}
+                renderCustomHeader={CustomHeader}
+                calendarClassName="custom-calendar"
+                showMonthYearDropdown
+                showYearDropdown
+                dropdownMode="select"
+                dateFormat="dd/MM/yyyy"
               />
             </div>
           )}
 
           {/* Guests Dropdown */}
           {activeField === 'who' && (
-            <div className="absolute z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200 right-0 md:right-auto">
+            <div className={`absolute z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200 ${scrolled ? 'right-0' : 'right-0 md:right-auto'} transition-all duration-300`}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-700 font-medium">Guests</span>
+                <span className="text-sm text-gray-700 font-medium">Voyageurs</span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleGuestChange(-1);
                     }}
-                    className="px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100"
+                    className="px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     -
                   </button>
@@ -198,7 +241,7 @@ export default function SearchBar({ onSearch }) {
                       e.stopPropagation();
                       handleGuestChange(1);
                     }}
-                    className="px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100"
+                    className="px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     +
                   </button>
