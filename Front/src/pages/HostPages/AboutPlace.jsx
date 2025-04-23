@@ -29,9 +29,9 @@ export default function BecomeHost() {
               </div>
 
               <p className="text-gray-600 text-lg leading-relaxed max-w-xl">
-                Commencez par nous décrire votre bien immobilier. Indiquez s'il s'agit d'un appartement complet, 
-                d'une maison entière ou d'une chambre privée. Précisez sa localisation exacte et le nombre de 
-                personnes que vous pouvez accueillir confortablement. Ces informations nous aideront à mieux 
+                Commencez par nous décrire votre bien immobilier. Indiquez s'il s'agit d'un appartement complet,
+                d'une maison entière ou d'une chambre privée. Précisez sa localisation exacte et le nombre de
+                personnes que vous pouvez accueillir confortablement. Ces informations nous aideront à mieux
                 présenter votre offre aux voyageurs.
               </p>
 
@@ -82,7 +82,7 @@ export default function BecomeHost() {
           </div>
         </div>
       </main>
-
+      <div className='mt-8' ></div>
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
@@ -93,8 +93,8 @@ export default function BecomeHost() {
             Retour
           </Link>
           <Link
-            to="/host/step2"
-            className="bg-black text-white px-8 py-4 rounded-xl font-medium text-base hover:bg-gray-800 transition-colors"
+            to="/Structure"
+            className="bg-orange-600 text-white px-8 py-4 rounded-xl font-medium text-base hover:bg-orange-700 transition-colors"
           >
             Continuer
           </Link>

@@ -31,7 +31,7 @@ export default function BecomeHost() {
               <div className="space-y-16">
                 {/* Step 1 */}
                 <div className="flex gap-6">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-medium text-lg">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-medium text-lg">
                     1
                   </div>
                   <div>
@@ -46,7 +46,7 @@ export default function BecomeHost() {
 
                 {/* Step 2 */}
                 <div className="flex gap-6">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-medium text-lg">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-medium text-lg">
                     2
                   </div>
                   <div>
@@ -61,7 +61,7 @@ export default function BecomeHost() {
 
                 {/* Step 3 */}
                 <div className="flex gap-6">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-medium text-lg">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-medium text-lg">
                     3
                   </div>
                   <div>
@@ -78,13 +78,13 @@ export default function BecomeHost() {
           </div>
         </div>
       </main>
-
+        <div className='mt-8' ></div>
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-8 py-4 flex justify-end">
           <Link
             to="/About-your-place"
-            className="bg-black text-white px-6 py-3 rounded-lg font-medium text-base hover:bg-gray-800 transition-colors"
+            className="bg-orange-600 text-white px-6 py-3 rounded-lg font-medium text-base hover:bg-orange-700 transition-colors"
           >
             Commencer
           </Link>
