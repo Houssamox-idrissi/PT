@@ -13,6 +13,7 @@ import AboutPlace from './pages/HostPages/AboutPlace.jsx';
 import PropertyType from './pages/HostPages/PropertyType.jsx';
 import PropertyDetails from './pages/HostPages/PropertyDetails.jsx';
 import Step2Page from './pages/HostPages/Etape2.jsx';
+import PropertyAmenities from './pages/HostPages/PropertyAmenities.jsx';
 
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/Structure" element={<PropertyType />} />
         <Route path="/PropertyDetails" element={<PropertyDetails />} />
         <Route path="/Step-2" element={<Step2Page/>} />
+        <Route path="/équipement" element={<PropertyAmenities/>} />
         <Route index element={<HomePage />} />
       </Routes>
     </Router>
