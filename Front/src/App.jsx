@@ -19,6 +19,7 @@ import PropertyTitle from './pages/HostPages/PropertyTitle.jsx';
 import PropertyDescription from './pages/HostPages/PropertyDescription.jsx';
 import PropertyPublish from './pages/HostPages/Etape3.jsx';
 import PropertyPrice from './pages/HostPages/PropertyPrice.jsx';
+import PropertyLocation from './pages/HostPages/PropertyLocation.jsx';
 
 
 export default function App() {
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/Property-Description" element={<PropertyDescription/>} />
         <Route path="/Property-Publish" element={<PropertyPublish/>} />
         <Route path="/Property-Price" element={<PropertyPrice/>} />
+        <Route path="/Property-Location" element={<PropertyLocation/>} />
         <Route index element={<HomePage />} />
       </Routes>
     </Router>

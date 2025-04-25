@@ -31,19 +31,11 @@ export default function PropertyPrice() {
           <Link to="/" className="text-black">
             <img src="/logo.png" alt="Holi Square" className="h-14" />
           </Link>
-          <div className="flex items-center gap-6">
-            <button className="text-gray-600 hover:text-gray-900 font-medium px-4 py-2 rounded-full hover:bg-gray-50">
-              Des questions ?
-            </button>
-            <button className="text-gray-900 hover:text-gray-700 font-medium px-4 py-2 rounded-full border border-gray-200 hover:border-gray-300">
-              Enregistrer et quitter
-            </button>
-          </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-3xl mx-auto px-8">
           <div className="space-y-6">
             <div className="space-y-4">
@@ -55,7 +47,7 @@ export default function PropertyPrice() {
               </p>
             </div>
 
-            <div className="mt-12 space-y-8">
+            <div className="space-y-8">
               {/* Price Input */}
               <div className="flex flex-col items-center">
                 <div className="relative inline-flex items-center">
@@ -123,23 +115,12 @@ export default function PropertyPrice() {
                   </button>
                 </div>
               </div>
-
-              {/* Similar Listings */}
-              <div className="flex items-center justify-center mt-8">
-                <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-full">
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <span className="text-gray-600">
-                    Logements similaires entre MAD267 et MAD399
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </main>
+
+      <div className='mt-8'></div>
 
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
@@ -158,7 +139,7 @@ export default function PropertyPrice() {
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >
-            Suivant
+            Créer une annonce
           </Link>
         </div>
       </footer>

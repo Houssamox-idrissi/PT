@@ -10,7 +10,7 @@ const sampleProperties = [
     pricePerNight: 1361,
     bedrooms: 3,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
 
   },
   {
@@ -21,7 +21,7 @@ const sampleProperties = [
     pricePerNight: 596,
     bedrooms: 4,
     bathrooms: 3,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ const sampleProperties = [
     pricePerNight: 586,
     bedrooms: 2,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ const sampleProperties = [
     pricePerNight: 532,
     bedrooms: 3,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
   {
     id: 5,
@@ -51,7 +51,7 @@ const sampleProperties = [
     pricePerNight: 1361,
     bedrooms: 3,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
 
   },
   {
@@ -62,7 +62,7 @@ const sampleProperties = [
     pricePerNight: 596,
     bedrooms: 4,
     bathrooms: 3,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
   {
     id: 7,
@@ -72,7 +72,7 @@ const sampleProperties = [
     pricePerNight: 586,
     bedrooms: 2,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
   {
     id: 8,
@@ -82,7 +82,7 @@ const sampleProperties = [
     pricePerNight: 532,
     bedrooms: 3,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
 
   {
@@ -93,7 +93,7 @@ const sampleProperties = [
     pricePerNight: 1361,
     bedrooms: 3,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
 
   },
   {
@@ -104,7 +104,7 @@ const sampleProperties = [
     pricePerNight: 596,
     bedrooms: 4,
     bathrooms: 3,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
   {
     id: 11,
@@ -114,7 +114,7 @@ const sampleProperties = [
     pricePerNight: 586,
     bedrooms: 2,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
   },
   {
     id: 12,
@@ -124,7 +124,7 @@ const sampleProperties = [
     pricePerNight: 532,
     bedrooms: 3,
     bathrooms: 2,
-    image: '/dd.jpeg'
+    image: '/test.png'
   }
 ];
 
@@ -193,9 +193,7 @@ export default function PropertiesGrid({ searchParams }) {
                   alt={property.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-3 right-3 bg-white/90 rounded-full px-3 py-1 text-sm font-medium">
-                  <span className="text-orange-600">{property.distance}</span>
-                </div>
+                
               </div>
 
               <div className="p-5">

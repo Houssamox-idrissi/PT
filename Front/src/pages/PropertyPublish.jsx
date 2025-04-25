@@ -10,6 +10,14 @@ export default function PropertyPublish() {
           <Link to="/" className="text-black">
             <img src="/logo.png" alt="Holi Square" className="h-14" />
           </Link>
+          <div className="flex items-center gap-6">
+            <button className="text-gray-600 hover:text-gray-900 font-medium px-4 py-2 rounded-full hover:bg-gray-50">
+              Des questions ?
+            </button>
+            <button className="text-gray-900 hover:text-gray-700 font-medium px-4 py-2 rounded-full border border-gray-200 hover:border-gray-300">
+              Enregistrer et quitter
+            </button>
+          </div>
         </div>
       </header>
 
@@ -29,14 +37,14 @@ export default function PropertyPublish() {
               </div>
 
               <p className="text-gray-600 text-lg leading-relaxed max-w-xl">
-                Enfin, vous définissez votre
+                Enfin, vous choisissez les paramètres de réservation, définissez votre
                 tarification et publiez votre annonce.
               </p>
             </div>
 
             {/* Right Column - Video */}
             <div className="hidden lg:block">
-              <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden">
+              <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
                 <video
                   className="absolute inset-0 w-full h-full object-cover"
                   autoPlay
@@ -62,13 +70,13 @@ export default function PropertyPublish() {
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
           <Link
-            to="/Property-Description"
+            to="/property-description"
             className="text-gray-900 font-medium text-base hover:underline"
           >
             Retour
           </Link>
           <Link
-            to="/Property-Price"
+            to="/property-settings"
             className="bg-orange-600 text-white px-8 py-4 rounded-xl font-medium text-base hover:bg-orange-700 transition-colors"
           >
             Continuer
