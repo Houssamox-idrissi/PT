@@ -10,14 +10,6 @@ export default function PropertyPublish() {
           <Link to="/" className="text-black">
             <img src="/logo.png" alt="Holi Square" className="h-14" />
           </Link>
-          <div className="flex items-center gap-6">
-            <button className="text-gray-600 hover:text-gray-900 font-medium px-4 py-2 rounded-full hover:bg-gray-50">
-              Des questions ?
-            </button>
-            <button className="text-gray-900 hover:text-gray-700 font-medium px-4 py-2 rounded-full border border-gray-200 hover:border-gray-300">
-              Enregistrer et quitter
-            </button>
-          </div>
         </div>
       </header>
 
@@ -37,14 +29,14 @@ export default function PropertyPublish() {
               </div>
 
               <p className="text-gray-600 text-lg leading-relaxed max-w-xl">
-                Enfin, vous choisissez les paramètres de réservation, définissez votre
+                Enfin, vous définissez votre
                 tarification et publiez votre annonce.
               </p>
             </div>
 
             {/* Right Column - Video */}
             <div className="hidden lg:block">
-              <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden">
                 <video
                   className="absolute inset-0 w-full h-full object-cover"
                   autoPlay

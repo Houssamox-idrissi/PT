@@ -58,13 +58,13 @@ export default function PropertyDescription() {
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
           <Link
-            to="/Property-Title"
+            to="/Property-Description"
             className="text-gray-900 font-medium text-base hover:underline"
           >
             Retour
           </Link>
           <Link
-            to="/property-price"
+            to="/Property-Publish"
             className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
               description.trim().length > 0
                 ? 'bg-orange-600 text-white hover:bg-orange-700'
