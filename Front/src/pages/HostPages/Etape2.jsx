@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function PropertyPhotos() {
+export default function Etape2() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -32,7 +32,7 @@ export default function PropertyPhotos() {
               </div>
 
               <p className="text-gray-600 text-lg leading-relaxed max-w-xl">
-                Mettez en valeur votre bien avec des photos de qualité et une description détaillée. 
+                Mettez en valeur votre bien avec des photos de qualité et une description détaillée.
                 Ajoutez les équipements disponibles et créez une annonce qui se démarque.
               </p>
 
@@ -93,7 +93,7 @@ export default function PropertyPhotos() {
           </div>
         </div>
       </main>
-
+      <div className='mt-8' ></div>
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">

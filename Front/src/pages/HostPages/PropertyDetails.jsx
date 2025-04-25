@@ -27,15 +27,8 @@ export default function PropertyDetails() {
     }));
   };
 
-  const handlePriceChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '');
-    setDetails(prev => ({
-      ...prev,
-      basePrice: value
-    }));
-  };
 
-  const isValid = details.capacity > 0 && details.bedrooms > 0 && details.basePrice !== '';
+  const isValid = details.capacity > 0 && details.bedrooms > 0;
 
   return (
     <div className="min-h-screen bg-white">
@@ -132,24 +125,6 @@ export default function PropertyDetails() {
                       <path strokeLinecap="round" strokeWidth="2" d="M8 4v8M4 8h8" />
                     </svg>
                   </button>
-                </div>
-              </div>
-
-              {/* Base Price */}
-              <div className="flex items-center justify-between py-6 border-b border-gray-200">
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900">Prix par nuit</h2>
-                  <p className="text-gray-500 text-sm mt-1">Prix de base hors saison</p>
-                </div>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={details.basePrice}
-                    onChange={handlePriceChange}
-                    placeholder="0"
-                    className="w-32 px-8 py-2 text-lg text-right border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  />
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">€</span>
                 </div>
               </div>
             </div>

@@ -139,12 +139,6 @@ export default function PropertyAmenities() {
             <img src="/logo.png" alt="Holi Square" className="h-14" />
           </Link>
           <div className="flex items-center gap-6">
-            <button className="text-gray-600 hover:text-gray-900 font-medium px-4 py-2 rounded-full hover:bg-gray-50">
-              Des questions ?
-            </button>
-            <button className="text-gray-900 hover:text-gray-700 font-medium px-4 py-2 rounded-full border border-gray-200 hover:border-gray-300">
-              Enregistrer et quitter
-            </button>
           </div>
         </div>
       </header>
@@ -171,11 +165,10 @@ export default function PropertyAmenities() {
                 <button
                   key={amenity.id}
                   onClick={() => toggleAmenity(amenity.id)}
-                  className={`flex items-start gap-4 p-6 rounded-2xl border-2 transition-all hover:border-gray-900 ${
-                    selectedAmenities.has(amenity.id)
+                  className={`flex items-start gap-4 p-6 rounded-2xl border-2 transition-all hover:border-gray-900 ${selectedAmenities.has(amenity.id)
                       ? 'border-gray-900 bg-gray-50'
                       : 'border-gray-200'
-                  }`}
+                    }`}
                 >
                   <div className="text-gray-700">{amenity.icon}</div>
                   <div className="text-left">
@@ -190,7 +183,7 @@ export default function PropertyAmenities() {
           </div>
         </div>
       </main>
-
+      <div className='mt-8' ></div>
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
@@ -201,12 +194,11 @@ export default function PropertyAmenities() {
             Retour
           </Link>
           <Link
-            to="/property-description"
-            className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
-              selectedAmenities.size > 0
+            to="/Property-Photos"
+            className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${selectedAmenities.size > 0
                 ? 'bg-orange-600 text-white hover:bg-orange-700'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
+              }`}
           >
             Continuer
           </Link>

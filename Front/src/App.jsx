@@ -14,6 +14,9 @@ import PropertyType from './pages/HostPages/PropertyType.jsx';
 import PropertyDetails from './pages/HostPages/PropertyDetails.jsx';
 import Step2Page from './pages/HostPages/Etape2.jsx';
 import PropertyAmenities from './pages/HostPages/PropertyAmenities.jsx';
+import PropertyPhotos from './pages/HostPages/PropertyPhotos.jsx';
+import PropertyTitle from './pages/HostPages/PropertyTitle.jsx';
+import PropertyDescription from './pages/HostPages/PropertyDescription.jsx';
 
 
 export default function App() {
@@ -34,6 +37,9 @@ export default function App() {
         <Route path="/PropertyDetails" element={<PropertyDetails />} />
         <Route path="/Step-2" element={<Step2Page/>} />
         <Route path="/équipement" element={<PropertyAmenities/>} />
+        <Route path="/Property-Photos" element={<PropertyPhotos/>} />
+        <Route path="/Property-Title" element={<PropertyTitle/>} />
+        <Route path="/Property-Description" element={<PropertyDescription/>} />
         <Route index element={<HomePage />} />
       </Routes>
     </Router>
