@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useProperty } from '../../context/PropertyContext';
 
 export default function PropertyTitle() {
-  const [title, setTitle] = useState('');
+  const navigate = useNavigate();
+  const { propertyData, updatePropertyData } = useProperty();
+  const [title, setTitle] = useState(propertyData.title || '');
   const maxLength = 32;
 
   const handleTitleChange = (e) => {
     const value = e.target.value;
     if (value.length <= maxLength) {
       setTitle(value);
+      updatePropertyData({ title: value });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (title.trim().length > 0) {
+      navigate('/Property-Description');
     }
   };
 
@@ -64,16 +75,17 @@ export default function PropertyTitle() {
           >
             Retour
           </Link>
-          <Link
-            to="/Property-Description"
+          <button
+            onClick={handleSubmit}
             className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
               title.trim().length > 0
                 ? 'bg-orange-600 text-white hover:bg-orange-700'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
+            disabled={title.trim().length === 0}
           >
             Suivant
-          </Link>
+          </button>
         </div>
       </footer>
     </div>

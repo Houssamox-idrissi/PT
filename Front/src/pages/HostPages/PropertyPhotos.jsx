@@ -1,8 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useProperty } from '../../context/PropertyContext';
 
 export default function PropertyPhotos() {
-  const [photos, setPhotos] = useState([]);
+  const navigate = useNavigate();
+  const { propertyData, updatePropertyData } = useProperty();
+  const [photos, setPhotos] = useState(propertyData.photos || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const fileInputRef = useRef(null);
@@ -33,17 +36,28 @@ export default function PropertyPhotos() {
   };
 
   const handleUpload = () => {
-    setPhotos([...photos, ...selectedPhotos]);
+    const updatedPhotos = [...photos, ...selectedPhotos];
+    setPhotos(updatedPhotos);
+    updatePropertyData({ photos: updatedPhotos });
     setSelectedPhotos([]);
     setIsModalOpen(false);
   };
 
   const handleDelete = (photoId) => {
-    setPhotos(photos.filter(photo => photo.id !== photoId));
+    const updatedPhotos = photos.filter(photo => photo.id !== photoId);
+    setPhotos(updatedPhotos);
+    updatePropertyData({ photos: updatedPhotos });
   };
 
   const openFileDialog = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (photos.length >= 5) {
+      navigate('/Property-Title');
+    }
   };
 
   return (
@@ -134,8 +148,8 @@ export default function PropertyPhotos() {
         </div>
       </main>
 
-    {/* Elegant Upload Modal */}
-    {isModalOpen && (
+      {/* Elegant Upload Modal */}
+      {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300">
           <div className="bg-white rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl">
             <div className="p-6 border-b border-gray-100">
@@ -231,7 +245,8 @@ export default function PropertyPhotos() {
           </div>
         </div>
       )}
-        <div className='mt-8' ></div>
+
+      <div className='mt-8' ></div>
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
@@ -241,16 +256,17 @@ export default function PropertyPhotos() {
           >
             Retour
           </Link>
-          <Link
-            to="/Property-Title"
+          <button
+            onClick={handleSubmit}
             className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
               photos.length >= 5
                 ? 'bg-orange-600 text-white hover:bg-orange-700'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
+            disabled={photos.length < 5}
           >
             Suivant
-          </Link>
+          </button>
         </div>
       </footer>
     </div>

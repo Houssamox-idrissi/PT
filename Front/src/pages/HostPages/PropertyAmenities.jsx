@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useProperty } from '../../context/PropertyContext';
 
 export default function PropertyAmenities() {
-  const [selectedAmenities, setSelectedAmenities] = useState(new Set());
+  const navigate = useNavigate();
+  const { propertyData, updatePropertyData } = useProperty();
+  const [selectedAmenities, setSelectedAmenities] = useState(new Set(propertyData.equipement || []));
 
   const amenities = [
     {
@@ -128,6 +131,12 @@ export default function PropertyAmenities() {
       newSelected.add(id);
     }
     setSelectedAmenities(newSelected);
+    updatePropertyData({ equipement: Array.from(newSelected) });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/Property-Photos');
   };
 
   return (
@@ -166,9 +175,9 @@ export default function PropertyAmenities() {
                   key={amenity.id}
                   onClick={() => toggleAmenity(amenity.id)}
                   className={`flex items-start gap-4 p-6 rounded-2xl border-2 transition-all hover:border-gray-900 ${selectedAmenities.has(amenity.id)
-                      ? 'border-gray-900 bg-gray-50'
-                      : 'border-gray-200'
-                    }`}
+                    ? 'border-gray-900 bg-gray-50'
+                    : 'border-gray-200'
+                  }`}
                 >
                   <div className="text-gray-700">{amenity.icon}</div>
                   <div className="text-left">
@@ -188,20 +197,21 @@ export default function PropertyAmenities() {
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
           <Link
-            to="/property-photos"
+            to="/Step-2"
             className="text-gray-900 font-medium text-base hover:underline"
           >
             Retour
           </Link>
-          <Link
-            to="/Property-Photos"
+          <button
+            onClick={handleSubmit}
             className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${selectedAmenities.size > 0
-                ? 'bg-orange-600 text-white hover:bg-orange-700'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              }`}
+              ? 'bg-orange-600 text-white hover:bg-orange-700'
+              : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            }`}
+            disabled={selectedAmenities.size === 0}
           >
             Continuer
-          </Link>
+          </button>
         </div>
       </footer>
     </div>

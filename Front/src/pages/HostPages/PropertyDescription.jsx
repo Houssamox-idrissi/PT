@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useProperty } from '../../context/PropertyContext';
 
 export default function PropertyDescription() {
-  const [description, setDescription] = useState('');
+  const navigate = useNavigate();
+  const { propertyData, updatePropertyData } = useProperty();
+  const [description, setDescription] = useState(propertyData.description || '');
   const maxLength = 500;
 
   const handleDescriptionChange = (e) => {
     const value = e.target.value;
     if (value.length <= maxLength) {
       setDescription(value);
+      updatePropertyData({ description: value });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (description.trim().length > 0) {
+      navigate('/Property-Location');
     }
   };
 
@@ -42,8 +53,8 @@ export default function PropertyDescription() {
                   value={description}
                   onChange={handleDescriptionChange}
                   rows={8}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gray-900 focus:ring-0 text-lg"
-                  placeholder="Décrivez l'ambiance de votre logement, les points d'intérêt à proximité, et ce qui rend votre espace spécial..."
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gray-900 focus:ring-0 resize-none text-lg"
+                  placeholder="Décrivez votre logement en détail..."
                 />
                 <div className="absolute bottom-3 right-3 text-sm text-gray-500">
                   {description.length}/{maxLength}
@@ -58,21 +69,22 @@ export default function PropertyDescription() {
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
           <Link
-            to="/Property-Description"
+            to="/Property-Title"
             className="text-gray-900 font-medium text-base hover:underline"
           >
             Retour
           </Link>
-          <Link
-            to="/Property-Publish"
+          <button
+            onClick={handleSubmit}
             className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
               description.trim().length > 0
                 ? 'bg-orange-600 text-white hover:bg-orange-700'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
+            disabled={description.trim().length === 0}
           >
             Suivant
-          </Link>
+          </button>
         </div>
       </footer>
     </div>

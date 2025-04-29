@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useProperty } from '../../context/PropertyContext';
 
 export default function PropertyDetails() {
+  const navigate = useNavigate();
+  const { propertyData, updatePropertyData } = useProperty();
   const [details, setDetails] = useState({
-    capacity: 1,
-    bedrooms: 1,
-    basePrice: ''
+    capacity: propertyData.capacity || 1,
+    nombreOfChambres: propertyData.nombreOfChambres || 1
   });
 
   const handleIncrement = (field) => {
     const maxValues = {
       capacity: 10,
-      bedrooms: 5,
+      nombreOfChambres: 5,
     };
     
     setDetails(prev => ({
@@ -27,8 +29,16 @@ export default function PropertyDetails() {
     }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updatePropertyData({
+      capacity: details.capacity,
+      nombreOfChambres: details.nombreOfChambres
+    });
+    navigate('/Step-2');
+  };
 
-  const isValid = details.capacity > 0 && details.bedrooms > 0;
+  const isValid = details.capacity > 0 && details.nombreOfChambres > 0;
 
   return (
     <div className="min-h-screen bg-white">
@@ -101,24 +111,24 @@ export default function PropertyDetails() {
                 </div>
                 <div className="flex items-center gap-4">
                   <button
-                    onClick={() => handleDecrement('bedrooms')}
+                    onClick={() => handleDecrement('nombreOfChambres')}
                     className={`w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center ${
-                      details.bedrooms === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:border-gray-900'
+                      details.nombreOfChambres === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:border-gray-900'
                     }`}
-                    disabled={details.bedrooms === 1}
+                    disabled={details.nombreOfChambres === 1}
                   >
                     <span className="sr-only">Réduire</span>
                     <svg width="16" height="16" fill="none" stroke="currentColor">
                       <path strokeLinecap="round" strokeWidth="2" d="M4 8h8" />
                     </svg>
                   </button>
-                  <span className="w-12 text-center text-lg">{details.bedrooms}</span>
+                  <span className="w-12 text-center text-lg">{details.nombreOfChambres}</span>
                   <button
-                    onClick={() => handleIncrement('bedrooms')}
+                    onClick={() => handleIncrement('nombreOfChambres')}
                     className={`w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center ${
-                      details.bedrooms === 5 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:border-gray-900'
+                      details.nombreOfChambres === 5 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:border-gray-900'
                     }`}
-                    disabled={details.bedrooms === 5}
+                    disabled={details.nombreOfChambres === 5}
                   >
                     <span className="sr-only">Augmenter</span>
                     <svg width="16" height="16" fill="none" stroke="currentColor">
@@ -132,6 +142,7 @@ export default function PropertyDetails() {
         </div>
       </main>
 
+
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
@@ -141,7 +152,8 @@ export default function PropertyDetails() {
           >
             Retour
           </Link>
-          <Link to="/Step-2"
+          <button
+            onClick={handleSubmit}
             className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
               isValid 
                 ? 'bg-orange-600 text-white hover:bg-orange-700' 
@@ -149,8 +161,8 @@ export default function PropertyDetails() {
             }`}
             disabled={!isValid}
           >
-            Suivant
-          </Link>
+            Continuer
+          </button>
         </div>
       </footer>
     </div>

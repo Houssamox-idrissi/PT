@@ -1,9 +1,42 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useProperty } from '../../context/PropertyContext';
+import axios from 'axios';
+
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: 'http://192.168.1.111:8080',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  withCredentials: true // Important for CORS with credentials
+});
+
+// Static test data
+const staticAgency = {
+  id: 0,
+  nom: "string",
+  tel: "string",
+  email: "string",
+  directeur: "string"
+};
+
+const staticEmployee = {
+  name: "string",
+  email: "string",
+  password: "string",
+  role: "DIRECTEUR",
+  agenceId: 0
+};
 
 export default function PropertyPrice() {
-  const [basePrice, setBasePrice] = useState(330);
+  const navigate = useNavigate();
+  const { propertyData, updatePropertyData } = useProperty();
+  const [basePrice, setBasePrice] = useState(propertyData.pricePerNight || 330);
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const serviceFee = Math.round(basePrice * 0.142); // 14.2% service fee
   const totalPrice = basePrice + serviceFee;
   const hostEarnings = Math.round(basePrice * 0.97); // Host keeps 97%
@@ -12,8 +45,10 @@ export default function PropertyPrice() {
     const value = e.target.value.replace(/\D/g, '');
     if (value === '' || parseInt(value) === 0) {
       setBasePrice(0);
+      updatePropertyData({ pricePerNight: 0 });
     } else {
       setBasePrice(parseInt(value));
+      updatePropertyData({ pricePerNight: parseInt(value) });
     }
   };
 
@@ -21,6 +56,104 @@ export default function PropertyPrice() {
     const input = document.getElementById('price-input');
     input.focus();
     input.setSelectionRange(0, String(basePrice).length);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!basePrice || isSubmitting) return;
+
+    // Validate required fields
+    const requiredFields = [
+      { field: propertyData.type, message: 'Le type de propriété est requis' },
+      { field: propertyData.capacity, message: 'La capacité est requise' },
+      { field: propertyData.nombreOfChambres, message: 'Le nombre de chambres est requis' },
+      { field: propertyData.title, message: 'Le titre est requis' },
+      { field: propertyData.description, message: 'La description est requise' },
+      { field: propertyData.address.street, message: 'L\'adresse est requise' },
+      { field: propertyData.address.city, message: 'La ville est requise' },
+      { field: propertyData.address.country, message: 'Le pays est requis' }
+    ];
+
+    const missingField = requiredFields.find(field => !field.field);
+    if (missingField) {
+      setError(missingField.message);
+      return;
+    }
+
+    // Validate property type
+    const validTypes = ['Maison', 'Appartement', 'Villa', 'Riad', 'Chambre privée', 'Studio indépendant', 'Hôtel', 'Autres'];
+    if (!validTypes.includes(propertyData.type)) {
+      setError('Le type de propriété n\'est pas valide. Veuillez choisir parmi: ' + validTypes.join(', '));
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Prepare the property data according to backend expectations
+      const propertyToSubmit = {
+        title: propertyData.title,
+        address: {
+          street: propertyData.address.street,
+          city: propertyData.address.city,
+          state: propertyData.address.state || '',
+          country: propertyData.address.country,
+          postalCode: propertyData.address.postalCode || '',
+          latitude: Number(propertyData.address.latitude) || 0,
+          longitude: Number(propertyData.address.longitude) || 0
+        },
+        type: propertyData.type,
+        capacity: Number(propertyData.capacity),
+        description: propertyData.description,
+        nombreOfChambres: Number(propertyData.nombreOfChambres),
+        pricePerNight: Number(basePrice),
+        employeId: 1,
+        equipement: propertyData.equipement || []
+      };
+
+      // Log the data we're sending
+      console.log('Sending property data:', JSON.stringify(propertyToSubmit, null, 2));
+
+      try {
+        const response = await api.post('/api/logements', propertyToSubmit);
+        console.log('Response from server:', response.data);
+        navigate('/');
+      } catch (error) {
+        if (error.code === 'ERR_NETWORK') {
+          setError('Impossible de se connecter au serveur. Veuillez vérifier votre connexion et réessayer.');
+        } else if (error.response) {
+          // Log the error response details
+          console.error('Error response:', error.response.data);
+          console.error('Error status:', error.response.status);
+          console.error('Error headers:', error.response.headers);
+          
+          if (error.response.status === 400) {
+            // Try to get more detailed error information
+            const errorData = error.response.data;
+            let errorMessage = 'Les données envoyées sont invalides. ';
+            
+            if (typeof errorData === 'object') {
+              // If we have validation errors, show them
+              if (errorData.errors) {
+                errorMessage += Object.values(errorData.errors).join(', ');
+              } else if (errorData.message) {
+                errorMessage += errorData.message;
+              }
+            }
+            
+            setError(errorMessage);
+          } else {
+            setError(error.response.data?.message || 'Une erreur est survenue lors de la soumission.');
+          }
+        } else {
+          setError('Une erreur inattendue est survenue. Veuillez réessayer.');
+        }
+        console.error('Error details:', error);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -120,27 +253,46 @@ export default function PropertyPrice() {
         </div>
       </main>
 
+      {/* Add error message display */}
+      {error && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{error}</span>
+            <button 
+              onClick={() => setError(null)}
+              className="absolute top-0 bottom-0 right-0 px-4 py-3"
+            >
+              <span className="sr-only">Fermer</span>
+              <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className='mt-8'></div>
 
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
           <Link
-            to="/property-description"
+            to="/Etape3"
             className="text-gray-900 font-medium text-base hover:underline"
           >
             Retour
           </Link>
-          <Link
-            to="/property-publish"
+          <button
+            onClick={handleSubmit}
             className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
-              basePrice > 0
+              basePrice > 0 && !isSubmitting
                 ? 'bg-orange-600 text-white hover:bg-orange-700'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
+            disabled={basePrice <= 0 || isSubmitting}
           >
-            Créer une annonce
-          </Link>
+            {isSubmitting ? 'Envoi en cours...' : 'Créer une annonce'}
+          </button>
         </div>
       </footer>
     </div>
