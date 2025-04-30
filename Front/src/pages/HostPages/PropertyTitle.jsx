@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProperty } from '../../context/PropertyContext';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function PropertyTitle() {
   const navigate = useNavigate();
@@ -66,26 +67,29 @@ export default function PropertyTitle() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
-          <Link
-            to="/property-photos"
-            className="text-gray-900 font-medium text-base hover:underline"
-          >
-            Retour
-          </Link>
-          <button
-            onClick={handleSubmit}
-            className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
-              title.trim().length > 0
-                ? 'bg-orange-600 text-white hover:bg-orange-700'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-            disabled={title.trim().length === 0}
-          >
-            Suivant
-          </button>
+      {/* Footer with Progress */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
+        <ProgressBar />
+        <div className="max-w-7xl mx-auto px-12">
+          <div className="h-20 flex items-center justify-between">
+            <Link
+              to="/Property-Photos"
+              className="text-gray-900 font-medium text-base hover:underline"
+            >
+              Retour
+            </Link>
+            <button
+              onClick={handleSubmit}
+              className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
+                title.trim().length > 0
+                  ? 'bg-orange-600 text-white hover:bg-orange-700'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+              disabled={title.trim().length === 0}
+            >
+              Suivant
+            </button>
+          </div>
         </div>
       </footer>
     </div>

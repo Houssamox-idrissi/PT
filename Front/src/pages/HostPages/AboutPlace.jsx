@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function BecomeHost() {
   return (
@@ -82,22 +83,25 @@ export default function BecomeHost() {
           </div>
         </div>
       </main>
-      <div className='mt-8' ></div>
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
-          <Link
-            to="/BecomeHost"
-            className="text-gray-900 font-medium text-base hover:underline"
-          >
-            Retour
-          </Link>
-          <Link
-            to="/Structure"
-            className="bg-orange-600 text-white px-8 py-4 rounded-xl font-medium text-base hover:bg-orange-700 transition-colors"
-          >
-            Continuer
-          </Link>
+
+      {/* Footer with Progress */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
+        <ProgressBar />
+        <div className="max-w-7xl mx-auto px-12">
+          <div className="h-20 flex items-center justify-between">
+            <Link
+              to="/BecomeHost"
+              className="text-gray-900 font-medium text-base hover:underline"
+            >
+              Retour
+            </Link>
+            <Link
+              to="/Structure"
+              className="bg-orange-600 text-white px-8 py-4 rounded-xl font-medium text-base hover:bg-orange-700 transition-colors"
+            >
+              Suivant
+            </Link>
+          </div>
         </div>
       </footer>
     </div>

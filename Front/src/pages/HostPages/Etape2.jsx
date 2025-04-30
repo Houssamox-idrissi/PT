@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function Etape2() {
   return (
@@ -10,13 +11,11 @@ export default function Etape2() {
           <Link to="/" className="text-black">
             <img src="/logo.png" alt="Holi Square" className="h-14" />
           </Link>
-          <div className="flex items-center gap-6">
-          </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-32">
         <div className="max-w-7xl mx-auto px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
             {/* Left Column */}
@@ -93,22 +92,25 @@ export default function Etape2() {
           </div>
         </div>
       </main>
-      <div className='mt-8' ></div>
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
-          <Link
-            to="/équipement"
-            className="text-gray-900 font-medium text-base hover:underline"
-          >
-            Retour
-          </Link>
-          <Link
-            to="/équipement"
-            className="bg-orange-600 text-white px-8 py-4 rounded-xl font-medium text-base hover:bg-orange-700 transition-colors"
-          >
-            Continuer
-          </Link>
+
+      {/* Footer with Progress */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
+        <ProgressBar />
+        <div className="max-w-7xl mx-auto px-12">
+          <div className="h-20 flex items-center justify-between">
+            <Link
+              to="/PropertyDetails"
+              className="text-gray-900 font-medium hover:underline"
+            >
+              Retour
+            </Link>
+            <Link
+              to="/equipement"
+              className="h-12  px-8  py-3 rounded-xl font-medium bg-orange-600 text-white hover:bg-orange-700 transition-colors"
+            >
+              Suivant
+            </Link>
+          </div>
         </div>
       </footer>
     </div>

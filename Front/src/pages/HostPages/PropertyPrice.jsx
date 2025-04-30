@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProperty } from '../../context/PropertyContext';
+import ProgressBar from '../../components/ProgressBar';
 import axios from 'axios';
 
 // Create axios instance with default config
@@ -253,48 +254,38 @@ export default function PropertyPrice() {
         </div>
       </main>
 
-      {/* Add error message display */}
-      {error && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{error}</span>
-            <button 
-              onClick={() => setError(null)}
-              className="absolute top-0 bottom-0 right-0 px-4 py-3"
+      {/* Footer with Progress */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
+        <ProgressBar />
+        <div className="max-w-7xl mx-auto px-12">
+          <div className="h-20 flex items-center justify-between">
+            <Link
+              to="/Property-Publish"
+              className="text-gray-900 font-medium text-base hover:underline"
             >
-              <span className="sr-only">Fermer</span>
-              <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              Retour
+            </Link>
+            <button
+              onClick={handleSubmit}
+              disabled={!basePrice || isSubmitting}
+              className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
+                basePrice && !isSubmitting
+                  ? 'bg-orange-600 text-white hover:bg-orange-700'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              {isSubmitting ? 'Publication...' : 'Publier l\'annonce'}
             </button>
           </div>
         </div>
-      )}
-
-      <div className='mt-8'></div>
-
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
-          <Link
-            to="/Etape3"
-            className="text-gray-900 font-medium text-base hover:underline"
-          >
-            Retour
-          </Link>
-          <button
-            onClick={handleSubmit}
-            className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
-              basePrice > 0 && !isSubmitting
-                ? 'bg-orange-600 text-white hover:bg-orange-700'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-            disabled={basePrice <= 0 || isSubmitting}
-          >
-            {isSubmitting ? 'Envoi en cours...' : 'Créer une annonce'}
-          </button>
-        </div>
       </footer>
+
+      {/* Error Message */}
+      {error && (
+        <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <p>{error}</p>
+        </div>
+      )}
     </div>
   );
 } 

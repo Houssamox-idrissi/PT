@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+  import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProperty } from '../../context/PropertyContext';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function PropertyAmenities() {
   const navigate = useNavigate();
@@ -147,13 +148,11 @@ export default function PropertyAmenities() {
           <Link to="/" className="text-black">
             <img src="/logo.png" alt="Holi Square" className="h-14" />
           </Link>
-          <div className="flex items-center gap-6">
-          </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-32">
         <div className="max-w-3xl mx-auto px-8">
           <div className="space-y-6">
             <div className="space-y-4">
@@ -174,9 +173,10 @@ export default function PropertyAmenities() {
                 <button
                   key={amenity.id}
                   onClick={() => toggleAmenity(amenity.id)}
-                  className={`flex items-start gap-4 p-6 rounded-2xl border-2 transition-all hover:border-gray-900 ${selectedAmenities.has(amenity.id)
-                    ? 'border-gray-900 bg-gray-50'
-                    : 'border-gray-200'
+                  className={`flex items-start gap-4 p-6 rounded-2xl border-2 transition-all hover:border-gray-900 ${
+                    selectedAmenities.has(amenity.id)
+                      ? 'border-gray-900 bg-gray-50'
+                      : 'border-gray-200'
                   }`}
                 >
                   <div className="text-gray-700">{amenity.icon}</div>
@@ -192,26 +192,30 @@ export default function PropertyAmenities() {
           </div>
         </div>
       </main>
-      <div className='mt-8' ></div>
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
-          <Link
-            to="/Step-2"
-            className="text-gray-900 font-medium text-base hover:underline"
-          >
-            Retour
-          </Link>
-          <button
-            onClick={handleSubmit}
-            className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${selectedAmenities.size > 0
-              ? 'bg-orange-600 text-white hover:bg-orange-700'
-              : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-            disabled={selectedAmenities.size === 0}
-          >
-            Continuer
-          </button>
+
+      {/* Footer with Progress */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
+        <ProgressBar />
+        <div className="max-w-7xl mx-auto px-12">
+          <div className="h-20 flex items-center justify-between">
+            <Link
+              to="/Step-2"
+              className="text-gray-900 font-medium hover:underline"
+            >
+              Retour
+            </Link>
+            <button
+              onClick={handleSubmit}
+              className={`h-12 px-8 rounded-xl font-medium transition-colors ${
+                selectedAmenities.size > 0
+                  ? 'bg-orange-600 text-white hover:bg-orange-700'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+              disabled={selectedAmenities.size === 0}
+            >
+              Suivant
+            </button>
+          </div>
         </div>
       </footer>
     </div>

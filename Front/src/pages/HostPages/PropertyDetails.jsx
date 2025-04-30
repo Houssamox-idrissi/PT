@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProperty } from '../../context/PropertyContext';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function PropertyDetails() {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ export default function PropertyDetails() {
       </header>
 
       {/* Main Content */}
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-32">
         <div className="max-w-3xl mx-auto px-12">
           <div className="space-y-6">
             <div>
@@ -142,27 +143,29 @@ export default function PropertyDetails() {
         </div>
       </main>
 
-
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-12 py-6 flex justify-between items-center">
-          <Link
-            to="/Structure"
-            className="text-gray-900 font-medium text-base hover:underline"
-          >
-            Retour
-          </Link>
-          <button
-            onClick={handleSubmit}
-            className={`px-8 py-4 rounded-xl font-medium text-base transition-colors ${
-              isValid 
-                ? 'bg-orange-600 text-white hover:bg-orange-700' 
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-            disabled={!isValid}
-          >
-            Continuer
-          </button>
+      {/* Footer with Progress */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
+        <ProgressBar />
+        <div className="max-w-7xl mx-auto px-12">
+          <div className="h-20 flex items-center justify-between">
+            <Link
+              to="/Structure"
+              className="text-gray-900 font-medium hover:underline"
+            >
+              Retour
+            </Link>
+            <button
+              onClick={handleSubmit}
+              className={`h-12 px-8 rounded-xl font-medium transition-colors ${
+                isValid 
+                  ? 'bg-orange-600 text-white hover:bg-orange-700' 
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+              disabled={!isValid}
+            >
+              Suivant
+            </button>
+          </div>
         </div>
       </footer>
     </div>

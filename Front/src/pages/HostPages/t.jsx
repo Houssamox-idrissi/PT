@@ -18,10 +18,12 @@ export default function ProgressBar() {
   const location = useLocation();
   const currentIndex = steps.findIndex(step => step.path === location.pathname);
   const [progress, setProgress] = useState(() => {
+    // Initialize with current progress
     return ((currentIndex + 1) / steps.length) * 100;
   });
 
   useEffect(() => {
+    // Save current progress and animate to new position
     const targetProgress = ((currentIndex + 1) / steps.length) * 100;
     setProgress(targetProgress);
     localStorage.setItem('propertyProgress', currentIndex.toString());
@@ -55,12 +57,12 @@ export default function ProgressBar() {
       <div className="relative h-1.5 w-full bg-gray-100 overflow-hidden">
         {/* Animated progress bar with gradient */}
         <div 
-          className="absolute top-0 left-0 h-full"
+          className="absolute top-0 left-0 h-full transition-all duration-600 ease-in-out transform origin-left"
           style={{ 
             width: `${progress}%`,
             background: 'linear-gradient(90deg, #F97316 0%, #FB923C 100%)',
             boxShadow: '0 0 10px rgba(249, 115, 22, 0.5)',
-            transition: 'width 0.5s linear'
+            willChange: 'width, transform'
           }}
         >
           {/* Inner glow effect */}
@@ -74,7 +76,7 @@ export default function ProgressBar() {
           className="absolute top-0 left-0 h-full w-[50%] bg-gradient-to-r from-transparent via-white to-transparent opacity-25"
           style={{ 
             transform: `translateX(${progress - 50}%)`,
-            transition: 'transform 0.5s linear'
+            transition: 'transform 1000ms cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         />
       </div>

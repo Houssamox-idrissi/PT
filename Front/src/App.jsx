@@ -41,7 +41,7 @@ export default function App() {
           <Route path="/Structure" element={<PropertyType />} />
           <Route path="/PropertyDetails" element={<PropertyDetails />} />
           <Route path="/Step-2" element={<Step2Page/>} />
-          <Route path="/équipement" element={<PropertyAmenities/>} />
+          <Route path="/equipement" element={<PropertyAmenities/>} />
           <Route path="/Property-Photos" element={<PropertyPhotos/>} />
           <Route path="/Property-Title" element={<PropertyTitle/>} />
           <Route path="/Property-Description" element={<PropertyDescription/>} />
