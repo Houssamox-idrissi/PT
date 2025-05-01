@@ -22,35 +22,33 @@ import PropertyPublish from './pages/HostPages/Etape3.jsx';
 import PropertyPrice from './pages/HostPages/PropertyPrice.jsx';
 import PropertyLocation from './pages/HostPages/PropertyLocation.jsx';
 
-
 export default function App() {
   return (
-    <PropertyProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainLayout />} />
-          <Route path="/loginAdmin" element={<LoginAdminPage />} />
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />} />
+        <Route path="/loginAdmin" element={<LoginAdminPage />} />
+        <Route path="/loginVoyageure" element={<LoginVoyageurePage />} />
+        <Route path="/RegisterVoyageur" element={<RegisterVoyageurePage />} />
+        <Route path="/HostRegistration" element={<HostRegistrationForm />} />
+        <Route path="/HostLogin" element={<HostLoginPage />} />
+        <Route path="/BecomeHost" element={<BecomeHost />} />
 
-          <Route path="/loginVoyageure" element={<LoginVoyageurePage />} />
-          <Route path="/RegisterVoyageur" element={<RegisterVoyageurePage />} />
-          <Route path="/AddingProperty" element={<PropertyRegistrationPage />} />
-          <Route path="/HostRegistration" element={<HostRegistrationForm />} />
-          <Route path="/HostLogin" element={<HostLoginPage />} />
-          <Route path="/BecomeHost" element={<BecomeHost />} />
-          <Route path="/About-your-place" element={<AboutPlace />} />
-          <Route path="/Structure" element={<PropertyType />} />
-          <Route path="/PropertyDetails" element={<PropertyDetails />} />
-          <Route path="/Step-2" element={<Step2Page/>} />
-          <Route path="/equipement" element={<PropertyAmenities/>} />
-          <Route path="/Property-Photos" element={<PropertyPhotos/>} />
-          <Route path="/Property-Title" element={<PropertyTitle/>} />
-          <Route path="/Property-Description" element={<PropertyDescription/>} />
-          <Route path="/Property-Publish" element={<PropertyPublish/>} />
-          <Route path="/Property-Price" element={<PropertyPrice/>} />
-          <Route path="/Property-Location" element={<PropertyLocation/>} />
-          <Route index element={<HomePage />} />
-        </Routes>
-      </Router>
-    </PropertyProvider>
+        <Route path="/AddingProperty" element={<PropertyProvider><PropertyRegistrationPage /></PropertyProvider>} />
+        <Route path="/About-your-place" element={<PropertyProvider><AboutPlace /></PropertyProvider>} />
+        <Route path="/Structure" element={<PropertyProvider><PropertyType /></PropertyProvider>} />
+        <Route path="/PropertyDetails" element={<PropertyProvider><PropertyDetails /></PropertyProvider>} />
+        <Route path="/Step-2" element={<PropertyProvider><Step2Page /></PropertyProvider>} />
+        <Route path="/equipement" element={<PropertyProvider><PropertyAmenities /></PropertyProvider>} />
+        <Route path="/Property-Photos" element={<PropertyProvider><PropertyPhotos /></PropertyProvider>} />
+        <Route path="/Property-Title" element={<PropertyProvider><PropertyTitle /></PropertyProvider>} />
+        <Route path="/Property-Description" element={<PropertyProvider><PropertyDescription /></PropertyProvider>} />
+        <Route path="/Property-Publish" element={<PropertyProvider><PropertyPublish /></PropertyProvider>} />
+        <Route path="/Property-Price" element={<PropertyProvider><PropertyPrice /></PropertyProvider>} />
+        <Route path="/Property-Location" element={<PropertyProvider><PropertyLocation /></PropertyProvider>} />
+
+        <Route index element={<HomePage />} />
+      </Routes>
+    </Router>
   );
 }

@@ -26,14 +26,14 @@ export const PropertyIcons = {
       <path strokeLinecap="round" strokeWidth="2" d="M10 12h12"/>
     </svg>
   ),
-  'Chambre privée': (
+  'Chambre': (
     <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" className="w-8 h-8">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 28V8h24v20"/>
       <path strokeLinecap="round" strokeWidth="2" d="M4 18h24"/>
       <path strokeLinecap="round" strokeWidth="2" d="M12 13h2M18 13h2"/>
     </svg>
   ),
-  'Studio indépendant': (
+  'Studio': (
     <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" className="w-8 h-8">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 4h20v24H6z"/>
       <path strokeLinecap="round" strokeWidth="2" d="M6 16h20"/>

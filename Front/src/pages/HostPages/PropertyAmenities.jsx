@@ -156,9 +156,7 @@ export default function PropertyAmenities() {
         <div className="max-w-3xl mx-auto px-8">
           <div className="space-y-6">
             <div className="space-y-4">
-              <div className="inline-block px-4 py-2 bg-orange-50 rounded-full">
-                <p className="text-orange-600 font-medium">Étape 3</p>
-              </div>
+             
               <h1 className="text-[32px] font-semibold text-gray-900">
                 Indiquez aux voyageurs quels sont les équipements de votre logement
               </h1>

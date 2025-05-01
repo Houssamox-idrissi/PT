@@ -9,9 +9,9 @@ export default function SearchBar({ onSearch, scrolled }) {
   const [activeField, setActiveField] = useState(null);
   const [where, setWhere] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
-  const [guests, setGuests] = useState(1);
   const [showCalendar, setShowCalendar] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [guests, setGuests] = useState(1);
   const containerRef = useRef(null);
 
   // Toggle field activation
@@ -181,7 +181,7 @@ export default function SearchBar({ onSearch, scrolled }) {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className={`text-gray-800 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-sm'}`}>
-                        Ajouter des voyageurs
+                        {guests} voyageur{guests > 1 ? 's' : ''}
                       </span>
                       {activeField === 'who' ? <FiChevronUp className="text-gray-400" /> : <FiChevronDown className="text-gray-400" />}
                     </div>
@@ -204,7 +204,7 @@ export default function SearchBar({ onSearch, scrolled }) {
 
           {/* Date Picker Dropdown */}
           {showCalendar && activeField === 'when' && (
-            <div className={`absolute z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200 transition-all duration-300 ${scrolled ? 'right-0' : ''}`}>
+            <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200">
               <DatePicker
                 selected={selectedDate}
                 onChange={handleDateChange}
@@ -222,26 +222,32 @@ export default function SearchBar({ onSearch, scrolled }) {
 
           {/* Guests Dropdown */}
           {activeField === 'who' && (
-            <div className={`absolute z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200 ${scrolled ? 'right-0' : 'right-0 md:right-auto'} transition-all duration-300`}>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-700 font-medium">Voyageurs</span>
-                <div className="flex items-center gap-2">
+            <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="font-medium">Voyageurs</div>
+                  <div className="text-sm text-gray-500">Nombre de voyageurs</div>
+                </div>
+                <div className="flex items-center gap-3">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleGuestChange(-1);
                     }}
-                    className="px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+                    className={`w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center ${
+                      guests === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:border-gray-400'
+                    }`}
+                    disabled={guests === 1}
                   >
                     -
                   </button>
-                  <span className="min-w-[20px] text-center">{guests}</span>
+                  <span className="w-6 text-center">{guests}</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleGuestChange(1);
                     }}
-                    className="px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:border-gray-400"
                   >
                     +
                   </button>

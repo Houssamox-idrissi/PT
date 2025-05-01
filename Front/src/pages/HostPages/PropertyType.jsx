@@ -9,7 +9,6 @@ export default function PropertyType() {
   const { propertyData, updatePropertyData } = useProperty();
   const [selectedType, setSelectedType] = useState(propertyData.type || '');
 
-  // Update selectedType when propertyData.type changes
   useEffect(() => {
     if (propertyData.type) {
       setSelectedType(propertyData.type);
@@ -21,8 +20,8 @@ export default function PropertyType() {
     { id: 'Appartement', label: 'Appartement' },
     { id: 'Villa', label: 'Villa' },
     { id: 'Riad', label: 'Riad' },
-    { id: 'Chambre privée', label: 'Chambre privée' },
-    { id: 'Studio indépendant', label: 'Studio indépendant' },
+    { id: 'Chambre', label: 'Chambre' },
+    { id: 'Studio', label: 'Studio' },
     { id: 'Hôtel', label: 'Hôtel' },
     { id: 'Autres', label: 'Autres' }
   ];
@@ -30,16 +29,13 @@ export default function PropertyType() {
   const handleTypeSelect = (type) => {
     console.log('Selected type:', type);
     setSelectedType(type);
-    // Update context immediately
     updatePropertyData({ type });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedType) {
-      // One final update to ensure type is saved
       updatePropertyData({ type: selectedType });
-      // Add a small delay to ensure the context is updated before navigation
       setTimeout(() => {
         navigate('/PropertyDetails');
       }, 100);
@@ -99,7 +95,6 @@ export default function PropertyType() {
         </div>
       </main>
 
-      {/* Footer with Progress */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_12px_rgba(0,0,0,0.03)]">
         <ProgressBar />
         <div className="max-w-7xl mx-auto px-12">

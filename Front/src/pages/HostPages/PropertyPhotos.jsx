@@ -6,30 +6,44 @@ import ProgressBar from '../../components/ProgressBar';
 export default function PropertyPhotos() {
   const navigate = useNavigate();
   const { propertyData, updatePropertyData } = useProperty();
-  const [photos, setPhotos] = useState(propertyData.photos || []);
+  const [photos, setPhotos] = useState(propertyData.imagesBase64 || []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
-    const newPhotos = files.map(file => ({
-      id: Math.random().toString(36).substring(2, 11),
-      url: URL.createObjectURL(file),
-      file: file
-    }));
-    setSelectedPhotos(newPhotos);
+    const newPhotos = files.map(file => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(newPhotos).then(base64Photos => {
+      setSelectedPhotos(base64Photos);
+    });
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
-    const newPhotos = files.map(file => ({
-      id: Math.random().toString(36).substring(2, 11),
-      url: URL.createObjectURL(file),
-      file: file
-    }));
-    setSelectedPhotos(newPhotos);
+    const newPhotos = files.map(file => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(newPhotos).then(base64Photos => {
+      setSelectedPhotos(base64Photos);
+    });
   };
 
   const handleDragOver = (e) => {
@@ -39,15 +53,15 @@ export default function PropertyPhotos() {
   const handleUpload = () => {
     const updatedPhotos = [...photos, ...selectedPhotos];
     setPhotos(updatedPhotos);
-    updatePropertyData({ photos: updatedPhotos });
+    updatePropertyData({ imagesBase64: updatedPhotos });
     setSelectedPhotos([]);
     setIsModalOpen(false);
   };
 
-  const handleDelete = (photoId) => {
-    const updatedPhotos = photos.filter(photo => photo.id !== photoId);
+  const handleDelete = (photoIndex) => {
+    const updatedPhotos = photos.filter((_, index) => index !== photoIndex);
     setPhotos(updatedPhotos);
-    updatePropertyData({ photos: updatedPhotos });
+    updatePropertyData({ imagesBase64: updatedPhotos });
   };
 
   const openFileDialog = () => {
@@ -115,15 +129,15 @@ export default function PropertyPhotos() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {photos.map((photo, index) => (
-                    <div key={photo.id} className="relative aspect-[4/3] rounded-lg overflow-hidden">
+                    <div key={index} className="relative aspect-[4/3] rounded-lg overflow-hidden">
                       {index === 0 && (
                         <div className="absolute top-3 left-3 bg-white px-3 py-1 rounded-lg text-sm font-medium">
                           Photo de couverture
                         </div>
                       )}
-                      <img src={photo.url} alt="" className="w-full h-full object-cover" />
+                      <img src={photo} alt="" className="w-full h-full object-cover" />
                       <button
-                        onClick={() => handleDelete(photo.id)}
+                        onClick={() => handleDelete(index)}
                         className="absolute top-3 right-3 p-1 bg-white rounded-full shadow-lg hover:bg-gray-100"
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -149,7 +163,7 @@ export default function PropertyPhotos() {
         </div>
       </main>
 
-      {/* Elegant Upload Modal */}
+      {/* Upload Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300">
           <div className="bg-white rounded-xl w-full max-w-2xl overflow-hidden shadow-2xl">
@@ -202,15 +216,15 @@ export default function PropertyPhotos() {
               ) : (
                 <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
-                    {selectedPhotos.map(photo => (
-                      <div key={photo.id} className="relative group">
+                    {selectedPhotos.map((photo, index) => (
+                      <div key={index} className="relative group">
                         <img
-                          src={photo.url}
+                          src={photo}
                           alt=""
                           className="w-full h-32 object-cover rounded-lg"
                         />
                         <button
-                          onClick={() => setSelectedPhotos(selectedPhotos.filter(p => p.id !== photo.id))}
+                          onClick={() => setSelectedPhotos(selectedPhotos.filter((_, i) => i !== index))}
                           className="absolute top-2 right-2 p-1 bg-white/90 rounded-full shadow-sm hover:bg-gray-100 transition-opacity opacity-0 group-hover:opacity-100"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

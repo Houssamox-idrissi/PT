@@ -4,32 +4,15 @@ import { useProperty } from '../../context/PropertyContext';
 import ProgressBar from '../../components/ProgressBar';
 import axios from 'axios';
 
-// Create axios instance with default config
 const api = axios.create({
-  baseURL: 'http://192.168.1.111:8080',
+  baseURL: 'http://192.168.1.23:8080',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   },
-  withCredentials: true // Important for CORS with credentials
+  withCredentials: true 
 });
 
-// Static test data
-const staticAgency = {
-  id: 0,
-  nom: "string",
-  tel: "string",
-  email: "string",
-  directeur: "string"
-};
-
-const staticEmployee = {
-  name: "string",
-  email: "string",
-  password: "string",
-  role: "DIRECTEUR",
-  agenceId: 0
-};
 
 export default function PropertyPrice() {
   const navigate = useNavigate();
@@ -38,9 +21,9 @@ export default function PropertyPrice() {
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const serviceFee = Math.round(basePrice * 0.142); // 14.2% service fee
+  const serviceFee = Math.round(basePrice * 0.142); 
   const totalPrice = basePrice + serviceFee;
-  const hostEarnings = Math.round(basePrice * 0.97); // Host keeps 97%
+  const hostEarnings = Math.round(basePrice * 0.97);
 
   const handlePriceChange = (e) => {
     const value = e.target.value.replace(/\D/g, '');
@@ -63,7 +46,6 @@ export default function PropertyPrice() {
     e.preventDefault();
     if (!basePrice || isSubmitting) return;
 
-    // Validate required fields
     const requiredFields = [
       { field: propertyData.type, message: 'Le type de propriété est requis' },
       { field: propertyData.capacity, message: 'La capacité est requise' },
@@ -92,65 +74,176 @@ export default function PropertyPrice() {
     setError(null);
 
     try {
-      // Prepare the property data according to backend expectations
+      // Validate and prepare the data
+      if (!propertyData.title || !propertyData.description || !propertyData.type || 
+          !propertyData.capacity || !propertyData.nombreOfChambres || !basePrice) {
+        setError('Tous les champs obligatoires doivent être remplis');
+        return;
+      }
+
+      // Validate address
+      if (!propertyData.address || !propertyData.address.street || !propertyData.address.city || 
+          !propertyData.address.country) {
+        setError('L\'adresse complète est requise');
+        return;
+      }
+
+      // Process and validate images
+      let processedImages = [];
+      if (Array.isArray(propertyData.imagesBase64)) {
+        processedImages = propertyData.imagesBase64.map((img, index) => {
+          if (typeof img === 'string') {
+            // Remove data:image prefix if present
+            const base64Match = img.match(/^data:image\/[a-z]+;base64,(.+)$/);
+            const base64Content = base64Match ? base64Match[1] : img;
+            // Validate base64 content
+            if (!base64Content || base64Content.trim() === '') {
+              throw new Error(`Image ${index + 1} is empty or invalid`);
+            }
+            // Validate base64 format
+            try {
+              atob(base64Content);
+            } catch (e) {
+              throw new Error(`Image ${index + 1} is not a valid base64 string`);
+            }
+            return base64Content;
+          }
+          return null;
+        }).filter(Boolean); // Remove any null values
+      }
+
+      // Log the processed images
+      console.log('Processed images:', processedImages.map(img => img.substring(0, 50) + '...'));
+
+      // Validate numeric fields
+      const capacity = Number(propertyData.capacity);
+      const nombreOfChambres = Number(propertyData.nombreOfChambres);
+      const pricePerNight = Number(basePrice);
+
+      if (isNaN(capacity) || capacity <= 0) {
+        setError('La capacité doit être un nombre positif');
+        return;
+      }
+
+      if (isNaN(nombreOfChambres) || nombreOfChambres <= 0) {
+        setError('Le nombre de chambres doit être un nombre positif');
+        return;
+      }
+
+      if (isNaN(pricePerNight) || pricePerNight <= 0) {
+        setError('Le prix par nuit doit être un nombre positif');
+        return;
+      }
+
+      // Create the property object matching the API's expected format
       const propertyToSubmit = {
-        title: propertyData.title,
+        title: propertyData.title.trim(),
         address: {
-          street: propertyData.address.street,
-          city: propertyData.address.city,
-          state: propertyData.address.state || '',
-          country: propertyData.address.country,
-          postalCode: propertyData.address.postalCode || '',
+          street: propertyData.address.street.trim(),
+          city: propertyData.address.city.trim(),
+          state: propertyData.address.state ? propertyData.address.state.trim() : '',
+          country: propertyData.address.country.trim(),
+          postalCode: propertyData.address.postalCode ? propertyData.address.postalCode.trim() : '',
           latitude: Number(propertyData.address.latitude) || 0,
           longitude: Number(propertyData.address.longitude) || 0
         },
-        type: propertyData.type,
-        capacity: Number(propertyData.capacity),
-        description: propertyData.description,
-        nombreOfChambres: Number(propertyData.nombreOfChambres),
-        pricePerNight: Number(basePrice),
-        employeId: 1,
-        equipement: propertyData.equipement || []
+        type: propertyData.type.trim(),
+        capacity: capacity,
+        description: propertyData.description.trim(),
+        nombreOfChambres: nombreOfChambres,
+        pricePerNight: pricePerNight,
+        employeId: 2,
+        equipement: Array.isArray(propertyData.equipement) ? propertyData.equipement.map(e => e.trim()).filter(Boolean) : [],
+        imagesBase64: processedImages
       };
 
-      // Log the data we're sending
-      console.log('Sending property data:', JSON.stringify(propertyToSubmit, null, 2));
+      // Additional validation
+      if (processedImages.length === 0) {
+        setError('Au moins une image est requise');
+        return;
+      }
+
+      // Validate property type against allowed values
+      const allowedTypes = ['Maison', 'Appartement', 'Villa', 'Riad', 'Chambre privée', 'Studio indépendant', 'Hôtel', 'Autres'];
+      if (!allowedTypes.includes(propertyToSubmit.type)) {
+        setError(`Le type de propriété doit être l'un des suivants: ${allowedTypes.join(', ')}`);
+        return;
+      }
+
+      // Log the full request data
+      console.log('Full request data:', JSON.stringify(propertyToSubmit, null, 2));
+
+      // Configure request
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      };
 
       try {
-        const response = await api.post('/api/logements', propertyToSubmit);
-        console.log('Response from server:', response.data);
-        navigate('/');
-      } catch (error) {
-        if (error.code === 'ERR_NETWORK') {
-          setError('Impossible de se connecter au serveur. Veuillez vérifier votre connexion et réessayer.');
-        } else if (error.response) {
-          // Log the error response details
-          console.error('Error response:', error.response.data);
-          console.error('Error status:', error.response.status);
-          console.error('Error headers:', error.response.headers);
-          
-          if (error.response.status === 400) {
-            // Try to get more detailed error information
-            const errorData = error.response.data;
-            let errorMessage = 'Les données envoyées sont invalides. ';
-            
-            if (typeof errorData === 'object') {
-              // If we have validation errors, show them
-              if (errorData.errors) {
-                errorMessage += Object.values(errorData.errors).join(', ');
-              } else if (errorData.message) {
-                errorMessage += errorData.message;
-              }
-            }
-            
-            setError(errorMessage);
-          } else {
-            setError(error.response.data?.message || 'Une erreur est survenue lors de la soumission.');
-          }
+        // Make the request
+        const response = await api.post('/api/logements', propertyToSubmit, config);
+        
+        if (response.status === 201 || response.status === 200) {
+          console.log('Property created successfully:', response.data);
+          navigate('/');
         } else {
-          setError('Une erreur inattendue est survenue. Veuillez réessayer.');
+          throw new Error('Unexpected response status: ' + response.status);
         }
-        console.error('Error details:', error);
+      } catch (error) {
+        // Log the full error details
+        console.error('Full error object:', error);
+        console.error('Error response data:', error.response?.data);
+        console.error('Error response status:', error.response?.status);
+        console.error('Error response headers:', error.response?.headers);
+        
+        // Show detailed error message
+        if (error.response?.data) {
+          // If the backend returns a specific error message
+          const errorData = error.response.data;
+          if (typeof errorData === 'object') {
+            // If it's an object, try to extract the message
+            const errorMessage = errorData.message || errorData.error || JSON.stringify(errorData);
+            setError(`Erreur du serveur: ${errorMessage}`);
+          } else {
+            // If it's a string or other type
+            setError(`Erreur du serveur: ${errorData}`);
+          }
+        } else if (error.code === 'ERR_NETWORK') {
+          setError('Impossible de se connecter au serveur. Veuillez vérifier votre connexion.');
+        } else if (error.code === 'ERR_BAD_REQUEST') {
+          setError('Format de données invalide. Veuillez vérifier les informations saisies.');
+        } else {
+          setError(`Erreur: ${error.message}`);
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response ? {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers
+        } : 'No response data'
+      });
+      
+      // Show detailed error message
+      if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else if (error.code === 'ERR_NETWORK') {
+        setError('Impossible de se connecter au serveur. Veuillez vérifier votre connexion.');
+      } else if (error.code === 'ERR_BAD_REQUEST') {
+        setError('Format de données invalide. Veuillez vérifier les informations saisies.');
+      } else {
+        setError(`Erreur: ${error.message}`);
       }
     } finally {
       setIsSubmitting(false);
