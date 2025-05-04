@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiArrowRight, FiLoader } from "react-icons/fi";
-import { loginAgency } from '../../services/Agence/AgencyService';
+import { login } from '../../services/Agence/authService';
 
 export default function AgenceLoginForm() {
   const [email, setEmail] = useState("");
@@ -16,21 +16,10 @@ export default function AgenceLoginForm() {
     setError("");
     
     try {
-      const response = await loginAgency({ email, password });
-      // Store the JWT token
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('agency', JSON.stringify(response.agency));
+      await login(email, password);
       navigate("/agency/dashboard");
     } catch (err) {
       console.error('Login error:', err);
-      // Handle different types of errors
-      if (err.details) {
-        setError(err.details.message || err.details);
-      } else if (err.message) {
-        setError(err.message);
-      } else {
-        setError("An unexpected error occurred during login. Please try again.");
-      }
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +101,7 @@ export default function AgenceLoginForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Agency Email
+                Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

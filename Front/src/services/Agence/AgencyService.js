@@ -3,26 +3,6 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/api/agences";
 const AUTH_URL = "http://localhost:8080/api/auth"
 
-//Login
-export const loginAgency = async (credentials) => {
-  try {
-    console.log('Attempting login with credentials:', credentials);
-    const response = await axios.post(`${AUTH_URL}/login`, {
-      username: credentials.email,
-      password: credentials.password
-    });
-    console.log('Login response:', response.data);
-    if (response.data && response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify({ email: credentials.email }));
-    }
-    return response.data;
-  } catch (error) {
-    console.error('Login error:', error.response?.data || error.message);
-    throw error.response?.data || error;
-  }
-};
-
 //Post
 export const registerAgency = async (formData) => {
   const l3aba = {
@@ -73,7 +53,6 @@ export const deleteAgency = async (id) => {
 
 export default {
   registerAgency,
-  loginAgency,
   getAllAgencies,
   getAgencyById,
   updateAgency,
