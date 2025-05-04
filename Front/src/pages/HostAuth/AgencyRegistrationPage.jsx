@@ -1,45 +1,58 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiUser, FiMail, FiPhone, FiLock, FiHome, FiFileText, FiCheck } from "react-icons/fi";
+import { FiHome, FiMail, FiPhone, FiUser, FiCheck } from "react-icons/fi";
+import { registerAgency } from "../../services/Agence/AgencyService";
 
-export default function HostRegistrationForm() {
+export default function AgencyRegistrationPage() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    nom: "",
+    tel: "",
     email: "",
-    phoneNumber: "",
-    businessName: "",
-    businessLicenseNumber: "",
-    password: "",
+    directeurName: "",
+    directeurEmail: "",
+    directeurPassword: "",
     confirmPassword: ""
   });
-  
+
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
-    
-    // Frontend validation
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+
+    try {
+      if (formData.directeurPassword !== formData.confirmPassword) {
+        throw new Error("Les mots de passe ne correspondent pas");
+      }
+
+      if (!formData.nom || !formData.tel || !formData.email || 
+          !formData.directeurName || !formData.directeurEmail || !formData.directeurPassword) {
+        throw new Error("Tous les champs sont obligatoires");
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email) || !emailRegex.test(formData.directeurEmail)) {
+        throw new Error("Format d'email invalide");
+      }
+
+      const phoneRegex = /^[0-9]{8,15}$/;
+      if (!phoneRegex.test(formData.tel)) {
+        throw new Error("Format de numéro de téléphone invalide");
+      }
+
+      const agency = await registerAgency(formData);
+      localStorage.setItem("agency", JSON.stringify(agency));
+      navigate("/dashboard");
+
+    } catch (err) {
+      console.error("Erreur d'inscription:", err);
+      setError(err.response?.data?.message || err.message || "Une erreur est survenue");
+    } finally {
       setIsLoading(false);
-      return;
     }
-    
-    if (!formData.businessName || !formData.businessLicenseNumber) {
-      setError("Business information is required");
-      setIsLoading(false);
-      return;
-    }
-    
-    console.log("Host registration data:", formData);
-    // Simulate API call
-    setTimeout(() => {
-      navigate("/host/dashboard");
-    }, 1500);
   };
 
   const handleChange = (e) => {
@@ -55,7 +68,7 @@ export default function HostRegistrationForm() {
         <div className="flex items-center">
           <img 
             src="/logo.png" 
-            alt="Holi Square Logo" 
+            alt="Logo Holi Square" 
             className="h-12 w-auto"
           />
           <span className="ml-3 text-2xl font-bold text-orange-600">Holi Square</span>
@@ -63,9 +76,9 @@ export default function HostRegistrationForm() {
 
         {/* Hero content */}
         <div className="max-w-md mb-90">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Join Our Host Community</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">Rejoignez Notre Réseau d'Agences</h1>
           <p className="text-lg text-gray-600 mb-8">
-            List your properties and connect with travelers from around the world.
+            Inscrivez votre agence immobilière et commencez à gérer vos biens efficacement.
           </p>
           
           {/* Benefits list */}
@@ -74,26 +87,26 @@ export default function HostRegistrationForm() {
               <div className="flex-shrink-0 h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">
                 <FiCheck className="h-4 w-4 text-orange-500" />
               </div>
-              <p className="ml-3 text-gray-600">Reach millions of potential guests</p>
+              <p className="ml-3 text-gray-600">Gérez plusieurs propriétés</p>
             </div>
             <div className="flex items-start">
               <div className="flex-shrink-0 h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">
                 <FiCheck className="h-4 w-4 text-orange-500" />
               </div>
-              <p className="ml-3 text-gray-600">Set your own prices and availability</p>
+              <p className="ml-3 text-gray-600">Suivez les performances des agents</p>
             </div>
             <div className="flex items-start">
               <div className="flex-shrink-0 h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">
                 <FiCheck className="h-4 w-4 text-orange-500" />
               </div>
-              <p className="ml-3 text-gray-600">24/7 support for hosts</p>
+              <p className="ml-3 text-gray-600">Accédez à des analyses détaillées</p>
             </div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="text-sm text-gray-500">
-          © {new Date().getFullYear()} Holi Square. All rights reserved.
+          © {new Date().getFullYear()} Holi Square. Tous droits réservés.
         </div>
       </div>
 
@@ -101,8 +114,8 @@ export default function HostRegistrationForm() {
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12 lg:p-24">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Host Registration</h2>
-            <p className="text-gray-500">Create your business account</p>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">Inscription Agence</h2>
+            <p className="text-gray-500">Créez votre compte agence</p>
           </div>
 
           {error && (
@@ -115,45 +128,45 @@ export default function HostRegistrationForm() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiUser className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    required
-                  />
+            <div>
+              <label htmlFor="nom" className="block text-sm font-medium text-gray-700 mb-1">
+                Nom de l'Agence *
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiHome className="h-5 w-5 text-gray-400" />
                 </div>
+                <input
+                  type="text"
+                  id="nom"
+                  name="nom"
+                  value={formData.nom}
+                  onChange={handleChange}
+                  className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Entrez le nom de l'agence"
+                  required
+                />
               </div>
+            </div>
 
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiUser className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    required
-                  />
+            <div>
+              <label htmlFor="tel" className="block text-sm font-medium text-gray-700 mb-1">
+                Numéro de Téléphone *
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiPhone className="h-5 w-5 text-gray-400" />
                 </div>
+                <input
+                  type="tel"
+                  id="tel"
+                  name="tel"
+                  value={formData.tel}
+                  onChange={handleChange}
+                  className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Entrez le numéro de téléphone"
+                  required
+                />
               </div>
             </div>
 
@@ -172,87 +185,68 @@ export default function HostRegistrationForm() {
                   value={formData.email}
                   onChange={handleChange}
                   className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Entrez l'adresse email"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                Phone Number
+              <label htmlFor="directeurName" className="block text-sm font-medium text-gray-700 mb-1">
+                Nom du Directeur *
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiPhone className="h-5 w-5 text-gray-400" />
+                  <FiUser className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  type="tel"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
+                  type="text"
+                  id="directeurName"
+                  name="directeurName"
+                  value={formData.directeurName}
                   onChange={handleChange}
                   className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Entrez le nom du directeur"
+                  required
                 />
               </div>
             </div>
 
-            <div className="border-t border-b border-gray-200 py-5 my-5">
-              <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
-                <FiHome className="h-5 w-5 mr-2 text-orange-500" />
-                Business Information
-              </h3>
-
-              <div className="mb-4">
-                <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Business Name *
-                </label>
+            <div>
+              <label htmlFor="directeurEmail" className="block text-sm font-medium text-gray-700 mb-1">
+                Email du Directeur *
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiMail className="h-5 w-5 text-gray-400" />
+                </div>
                 <input
-                  type="text"
-                  id="businessName"
-                  name="businessName"
-                  value={formData.businessName}
+                  type="email"
+                  id="directeurEmail"
+                  name="directeurEmail"
+                  value={formData.directeurEmail}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Entrez l'email du directeur"
                   required
                 />
-              </div>
-
-              <div>
-                <label htmlFor="businessLicenseNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                  License Number *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiFileText className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    id="businessLicenseNumber"
-                    name="businessLicenseNumber"
-                    value={formData.businessLicenseNumber}
-                    onChange={handleChange}
-                    className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    placeholder="RC-123456789"
-                    required
-                  />
-                </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password *
+                <label htmlFor="directeurPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                  Mot de Passe *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiLock className="h-5 w-5 text-gray-400" />
+                    <FiUser className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
                     type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
+                    id="directeurPassword"
+                    name="directeurPassword"
+                    value={formData.directeurPassword}
                     onChange={handleChange}
                     className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     required
@@ -262,11 +256,11 @@ export default function HostRegistrationForm() {
 
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                  Confirm Password *
+                  Confirmer le Mot de Passe *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiLock className="h-5 w-5 text-gray-400" />
+                    <FiUser className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
                     type="password"
@@ -293,7 +287,7 @@ export default function HostRegistrationForm() {
               </div>
               <div className="ml-3 text-sm">
                 <label htmlFor="terms" className="text-gray-700">
-                  I agree to the <a href="#" className="text-orange-600 hover:text-orange-500">Terms</a> and <a href="#" className="text-orange-600 hover:text-orange-500">Privacy Policy</a> *
+                  J'accepte les <a href="#" className="text-orange-600 hover:text-orange-500">Conditions</a> et la <a href="#" className="text-orange-600 hover:text-orange-500">Politique de Confidentialité</a> *
                 </label>
               </div>
             </div>
@@ -309,19 +303,19 @@ export default function HostRegistrationForm() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Registering...
+                  Inscription en cours...
                 </>
               ) : (
-                'Register as Host'
+                "S'inscrire comme Agence"
               )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link to="/HostLogin" className="font-medium text-orange-600 hover:text-orange-500">
-                Sign in
+              Vous avez déjà un compte ?{' '}
+              <Link to="/agency/login" className="font-medium text-orange-600 hover:text-orange-500">
+                Se connecter
               </Link>
             </p>
           </div>

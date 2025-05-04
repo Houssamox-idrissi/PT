@@ -1,29 +1,39 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiHome, FiMail, FiLock, FiArrowRight, FiLoader } from "react-icons/fi";
+import { FiMail, FiLock, FiArrowRight, FiLoader } from "react-icons/fi";
+import { loginAgency } from '../../services/Agence/AgencyService';
 
-export default function HostLoginPage() {
+export default function AgenceLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     
-    // Simulate authentication
-    setTimeout(() => {
-      if (email && password) {
-        console.log("Host login successful:", { email });
-        navigate("/host/dashboard");
+    try {
+      const response = await loginAgency({ email, password });
+      // Store the JWT token
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('agency', JSON.stringify(response.agency));
+      navigate("/agency/dashboard");
+    } catch (err) {
+      console.error('Login error:', err);
+      // Handle different types of errors
+      if (err.details) {
+        setError(err.details.message || err.details);
+      } else if (err.message) {
+        setError(err.message);
       } else {
-        setError("Please enter valid credentials");
+        setError("An unexpected error occurred during login. Please try again.");
       }
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -42,9 +52,9 @@ export default function HostLoginPage() {
 
         {/* Hero content */}
         <div className="max-w-md mt-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Welcome back, Host</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">Welcome back, Agency</h1>
           <p className="text-lg text-gray-600 mb-8">
-            Manage your properties, bookings, and guest experiences with our professional hosting tools.
+            Manage your properties, agents, and client relationships with our professional agency tools.
           </p>
           
           {/* Benefits list */}
@@ -55,7 +65,7 @@ export default function HostLoginPage() {
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <p className="ml-3 text-gray-600">Track your property performance</p>
+              <p className="ml-3 text-gray-600">Manage your property portfolio</p>
             </div>
             <div className="flex items-start">
               <div className="flex-shrink-0 h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">
@@ -63,7 +73,7 @@ export default function HostLoginPage() {
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <p className="ml-3 text-gray-600">Access exclusive host resources</p>
+              <p className="ml-3 text-gray-600">Track agent performance</p>
             </div>
             <div className="flex items-start">
               <div className="flex-shrink-0 h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">
@@ -71,7 +81,7 @@ export default function HostLoginPage() {
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <p className="ml-3 text-gray-600">Manage bookings and pricing</p>
+              <p className="ml-3 text-gray-600">Access detailed analytics</p>
             </div>
           </div>
         </div>
@@ -86,8 +96,8 @@ export default function HostLoginPage() {
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12 lg:p-24">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Host Sign In</h2>
-            <p className="text-gray-500">Enter your business credentials</p>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">Agency Sign In</h2>
+            <p className="text-gray-500">Enter your agency credentials</p>
           </div>
 
           {error && (
@@ -102,7 +112,7 @@ export default function HostLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Business Email
+                Agency Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -114,7 +124,7 @@ export default function HostLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="your@business.com"
+                  placeholder="agency@example.com"
                   required
                 />
               </div>
@@ -180,9 +190,9 @@ export default function HostLoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have a host account?{' '}
-              <Link to="/HostRegistration" className="font-medium text-orange-600 hover:text-orange-500">
-                Register your business
+              New agency?{' '}
+              <Link to="/AgenceRegistration" className="font-medium text-orange-600 hover:text-orange-500">
+                Register your agency
               </Link>
             </p>
           </div>
@@ -190,4 +200,4 @@ export default function HostLoginPage() {
       </div>
     </div>
   );
-}
+} 

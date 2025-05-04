@@ -4,8 +4,8 @@ import LoginVoyageurePage from './pages/VoyageureAuth/LoginPage.jsx';
 import RegisterVoyageurePage from './pages/VoyageureAuth/RegisterVoyageurePage.jsx';
 import LoginAdminPage from './pages/AdminAuth/LoginAdminPage.jsx';
 import PropertyRegistrationPage from './pages/ProprietaireAuth/PropertyRegistrationPage.jsx';
-import HostRegistrationForm from './pages/HostAuth/HostRegistrationPage.jsx';
-import HostLoginPage from './pages/HostAuth/HostPageLogin.jsx';
+import AgenceRegistrationForm from './pages/HostAuth/AgencyRegistrationPage.jsx';
+import AgenceLoginPage from './pages/HostAuth/AgenceLoginForm.jsx';
 
 import MainLayout from './layouts/MainLayout.jsx';
 import HomePage from './pages/HomePage/HomePage';
@@ -30,8 +30,8 @@ export default function App() {
         <Route path="/loginAdmin" element={<LoginAdminPage />} />
         <Route path="/loginVoyageure" element={<LoginVoyageurePage />} />
         <Route path="/RegisterVoyageur" element={<RegisterVoyageurePage />} />
-        <Route path="/HostRegistration" element={<HostRegistrationForm />} />
-        <Route path="/HostLogin" element={<HostLoginPage />} />
+        <Route path="/AgenceRegistration" element={<AgenceRegistrationForm />} />
+        <Route path="/agency/login" element={<AgenceLoginPage />} />
         <Route path="/BecomeHost" element={<BecomeHost />} />
 
         <Route path="/AddingProperty" element={<PropertyProvider><PropertyRegistrationPage /></PropertyProvider>} />
