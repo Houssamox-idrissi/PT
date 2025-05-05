@@ -21,6 +21,7 @@ import PropertyDescription from './pages/HostPages/PropertyDescription.jsx';
 import PropertyPublish from './pages/HostPages/Etape3.jsx';
 import PropertyPrice from './pages/HostPages/PropertyPrice.jsx';
 import PropertyLocation from './pages/HostPages/PropertyLocation.jsx';
+import DirecteurDashboard from './pages/DirecteurDashboard/DirecteurDashboard.jsx';
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="/AgenceRegistration" element={<AgenceRegistrationForm />} />
         <Route path="/agency/login" element={<AgenceLoginPage />} />
         <Route path="/BecomeHost" element={<BecomeHost />} />
+        <Route path="/DirecteurDashboard" element={<DirecteurDashboard />} />
 
         <Route path="/AddingProperty" element={<PropertyProvider><PropertyRegistrationPage /></PropertyProvider>} />
         <Route path="/About-your-place" element={<PropertyProvider><AboutPlace /></PropertyProvider>} />

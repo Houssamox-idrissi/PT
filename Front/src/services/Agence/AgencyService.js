@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/agences";
-const AUTH_URL = "http://localhost:8080/api/auth"
 
 //Post
 export const registerAgency = async (formData) => {

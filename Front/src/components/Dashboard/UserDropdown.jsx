@@ -44,9 +44,9 @@ export default function UserDropdown() {
               <FiLogIn className="mr-3 text-orange-500" />
               <span>Login as Voyageur</span>
             </Link>
-            <Link to="/HostLogin" className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+            <Link to="/AgenceRegistration" className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
               <FiHome className="mr-3 text-orange-500" />
-              <span>Become a Host</span>
+              <span>Become an Agency</span>
             </Link>
           </div>
 
