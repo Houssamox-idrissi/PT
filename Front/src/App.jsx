@@ -22,6 +22,7 @@ import PropertyPublish from './pages/HostPages/Etape3.jsx';
 import PropertyPrice from './pages/HostPages/PropertyPrice.jsx';
 import PropertyLocation from './pages/HostPages/PropertyLocation.jsx';
 import DirecteurDashboard from './pages/DirecteurDashboard/DirecteurDashboard.jsx';
+import Commercial from './pages/DirecteurDashboard/Commercial.jsx';
 
 export default function App() {
   return (
@@ -34,7 +35,6 @@ export default function App() {
         <Route path="/AgenceRegistration" element={<AgenceRegistrationForm />} />
         <Route path="/agency/login" element={<AgenceLoginPage />} />
         <Route path="/BecomeHost" element={<BecomeHost />} />
-        <Route path="/DirecteurDashboard" element={<DirecteurDashboard />} />
 
         <Route path="/AddingProperty" element={<PropertyProvider><PropertyRegistrationPage /></PropertyProvider>} />
         <Route path="/About-your-place" element={<PropertyProvider><AboutPlace /></PropertyProvider>} />
@@ -48,6 +48,9 @@ export default function App() {
         <Route path="/Property-Publish" element={<PropertyProvider><PropertyPublish /></PropertyProvider>} />
         <Route path="/Property-Price" element={<PropertyProvider><PropertyPrice /></PropertyProvider>} />
         <Route path="/Property-Location" element={<PropertyProvider><PropertyLocation /></PropertyProvider>} />
+
+        <Route path="/Commercial" element={<Commercial />} />
+        <Route path="/DirecteurDashboard" element={<DirecteurDashboard />} />
 
         <Route index element={<HomePage />} />
       </Routes>

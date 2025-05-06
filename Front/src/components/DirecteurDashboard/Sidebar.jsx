@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { FiGrid, FiUsers, FiBarChart2, FiSettings, FiBell, FiChevronLeft, FiChevronRight, FiLogOut, FiSun, FiMoon } from "react-icons/fi";
+import { FiGrid, FiUsers, FiBarChart2, FiSettings,FiMenu , FiBell, FiChevronLeft, FiChevronRight, FiLogOut, FiSun, FiMoon } from "react-icons/fi";
 import clsx from "clsx";
+import { NavLink } from "react-router-dom";
 
 const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: <FiGrid /> },
-    { id: "team", label: "Commérciaux", icon: <FiUsers /> },
+    { id: "DirecteurDashboard", label: "Dashboard", icon: <FiGrid /> },
+    { id: "Commercial", label: "Commérciaux", icon: <FiUsers /> },
     { id: "analytics", label: "Analytique", icon: <FiBarChart2 /> },
     { id: "notifications", label: "Notifications", icon: <FiBell />, },
     { id: "settings", label: "Paramètres", icon: <FiSettings /> },
 ];
 
-export default function Sidebar({ activeRoute = "dashboard", onRouteChange, theme = "dark" }) {
-    const [collapsed, setCollapsed] = useState(false);
+export default function Sidebar({ activeRoute = "dashboard", onRouteChange, theme = "dark", collapsed, setCollapsed }) {
     const accent = "#d1671b";
     const bg = theme === "dark"
-        ? "bg-[rgba(10,4,0,0.7)] backdrop-blur-xl"
+        ? "bg-[#151313] backdrop-blur-xl"
         : "bg-[rgba(247,246,245,0.7)] backdrop-blur-xl";
     const text = theme === "dark" ? "text-[#f7f6f5]" : "text-[#0a0400]";
 
@@ -38,7 +38,7 @@ export default function Sidebar({ activeRoute = "dashboard", onRouteChange, them
                         onClick={() => setCollapsed(false)}
                         className="hover:bg-white/10 rounded-full transition"
                     >
-                        <FiChevronRight size={20} />
+                        <FiMenu size={20} />
                     </button>
                 </div>
             ) : (
@@ -49,31 +49,32 @@ export default function Sidebar({ activeRoute = "dashboard", onRouteChange, them
                         onClick={() => setCollapsed(true)}
                         className="hover:bg-white/10 rounded-full transition"
                     >
-                        <FiChevronLeft size={20} />
+                        <FiMenu size={20} />
                     </button>
                 </div>
             )}
             {/* Navigation */}
             <nav className="flex-1 flex flex-col gap-2 mt-4">
                 {navItems.map((item) => (
-                    <button
+                    <NavLink
                         key={item.id}
-                        onClick={() => onRouteChange && onRouteChange(item.id)}
-                        className={clsx(
+                        to={`/${item.id}`}
+                        className={({ isActive }) => clsx(
                             "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 relative group",
-                            activeRoute === item.id
+                            isActive
                                 ? `bg-[${accent}] bg-opacity-80 text-white shadow-lg`
                                 : "hover:bg-white/10 hover:text-white",
                             collapsed ? "justify-center px-2" : ""
                         )}
                         aria-current={activeRoute === item.id ? "page" : undefined}
                         aria-label={item.label}
+                        end
                     >
                         <span className="relative flex items-center">
                             {item.icon}
                         </span>
                         {!collapsed && <span className="ml-2 font-medium text-base">{item.label}</span>}
-                    </button>
+                    </NavLink>
                 ))}
             </nav>
             {/* User card */}
