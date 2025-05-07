@@ -17,7 +17,7 @@ export default function AgenceLoginForm() {
     
     try {
       await login(email, password);
-      navigate("/agency/dashboard");
+      navigate("/DirecteurDashboard");
     } catch (err) {
       console.error('Login error:', err);
     } finally {

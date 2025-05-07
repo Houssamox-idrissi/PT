@@ -10,11 +10,11 @@ export const login = async (email, password) => {
       
     };
     const response = await axios.post(`${AUTH_URL}/login`, r);    
-    if (response.data && response.data.token) {
-      localStorage.setItem('token', response.data.token);
+    if (response.data && response.data.jwt) {
+      localStorage.setItem('token', response.data.jwt);
       localStorage.setItem('user', JSON.stringify({ 
         email: email,
-        token: response.data.token
+        token: response.data.jwt
       }));
     }
     return response.data;
@@ -34,6 +34,11 @@ export const getCurrentUser = () => {
     return JSON.parse(userStr);
   }
   return null;
+};
+
+export const getAuthHeader = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
 export const dakhl = () => {
