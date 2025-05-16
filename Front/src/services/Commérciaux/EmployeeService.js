@@ -19,9 +19,7 @@ export const registerEmployee = async (formData) => {
 
 // GET 
 export const getAllEmployees = async () => {
-  const response = await axios.get(API_URL,{
-    headers: getAuthHeader()
-  });
+  const response = await axios.get(API_URL);
   return response.data;
 };
 

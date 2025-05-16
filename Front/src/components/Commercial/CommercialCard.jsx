@@ -13,9 +13,9 @@ const CommercialCard = ({ commercial, onEdit, onDelete }) => {
       <div className="text-base text-white/90 mb-1">
         <span className="font-semibold">Email:</span> {commercial.email}
       </div>
-      <div className="text-base text-white/90 mb-4">
+      {/* <div className="text-base text-white/90 mb-4">
         <span className="font-semibold">Agence ID:</span> {commercial.agenceId}
-      </div>
+      </div> */}
       
       <div className="absolute right-0 top-0 w-2 h-full bg-gradient-to-b from-[#d1671b]/80 to-transparent opacity-0 group-hover:opacity-80 transition-all duration-300"></div>
       

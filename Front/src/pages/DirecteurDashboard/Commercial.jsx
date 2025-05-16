@@ -12,6 +12,7 @@ import {
 import { dakhl } from "../../services/Agence/authService";
 import CommercialModal from "../../components/Commercial/CommercialModal";
 import CommercialCard from "../../components/Commercial/CommercialCard";
+import LoadingScreen from "../../components/loading/loadin";
 
 export default function Commercial() {
   const navigate = useNavigate();
@@ -30,7 +31,6 @@ export default function Commercial() {
     role: "COMMERCIAL",
     agenceId: 2,
   });
-  const [authChecked, setAuthChecked] = useState(false);
   const accent = "#d1671b";
   const Gray = "#473e3e";
 
@@ -38,14 +38,14 @@ export default function Commercial() {
   useEffect(() => {
     const checkAuth = async () => {
       if (!dakhl()) {
-        navigate('/login');
+        navigate('/agency/login');
         return;
       }
       fetchEmployees();
     };
 
     checkAuth();
-  }, [navigate]);
+  }, []);
 
   const fetchEmployees = async () => {
     try {
@@ -111,8 +111,8 @@ export default function Commercial() {
       name: "",
       email: "",
       password: "",
-      role: "Commercial",
-      agenceId: "1",
+      role: "COMMERCIAL",
+      agenceId: 2,
     });
   };
 
@@ -134,15 +134,7 @@ export default function Commercial() {
     return <LoadingScreen theme={theme} sidebarCollapsed={sidebarCollapsed} />;
   }
 
-  if (error) {
-    return <ErrorScreen 
-      error={error} 
-      theme={theme} 
-      sidebarCollapsed={sidebarCollapsed} 
-      onRetry={fetchEmployees}
-    />;
-  }
-
+  
   return (
     <div className={clsx(
       theme === "dark" ? "bg-[#1a1818] text-[#f7f6f5]" : "bg-[#f7f6f5] text-[#0a0400]",
@@ -150,7 +142,7 @@ export default function Commercial() {
     )}>
       <Sidebar
         activeRoute="Commercial"
-        theme={theme}
+        theme={theme} 
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
@@ -226,54 +218,3 @@ export default function Commercial() {
     </div>
   );
 }
-
-// Helper components
-const LoadingScreen = ({ theme, sidebarCollapsed }) => (
-  <div className={clsx(
-    theme === "dark" ? "bg-[#1a1818] text-[#f7f6f5]" : "bg-[#f7f6f5] text-[#0a0400]",
-    "min-h-screen flex"
-  )}>
-    <Sidebar
-      activeRoute="Commercial"
-      theme={theme}
-      collapsed={sidebarCollapsed}
-      setCollapsed={() => {}}
-    />
-    <main className={clsx(
-      "mt-10 flex-1 flex flex-col min-h-screen transition-all duration-300",
-      sidebarCollapsed ? "pl-20" : "pl-58"
-    )}>
-      <div className="px-8 py-10">
-        <div className="text-center">Chargement des commerciaux...</div>
-      </div>
-    </main>
-  </div>
-);
-
-const ErrorScreen = ({ error, theme, sidebarCollapsed, onRetry }) => (
-  <div className={clsx(
-    theme === "dark" ? "bg-[#1a1818] text-[#f7f6f5]" : "bg-[#f7f6f5] text-[#0a0400]",
-    "min-h-screen flex"
-  )}>
-    <Sidebar
-      activeRoute="Commercial"
-      theme={theme}
-      collapsed={sidebarCollapsed}
-      setCollapsed={() => {}}
-    />
-    <main className={clsx(
-      "mt-10 flex-1 flex flex-col min-h-screen transition-all duration-300",
-      sidebarCollapsed ? "pl-20" : "pl-58"
-    )}>
-      <div className="px-8 py-10">
-        <div className="text-center text-red-500">Erreur: {error}</div>
-        <button 
-          onClick={onRetry}
-          className="mt-4 px-4 py-2 bg-[#d1671b] text-white rounded-lg"
-        >
-          Réessayer
-        </button>
-      </div>
-    </main>
-  </div>
-);

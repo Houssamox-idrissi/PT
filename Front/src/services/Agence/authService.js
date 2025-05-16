@@ -4,22 +4,43 @@ const AUTH_URL = "http://localhost:8080/api/auth";
 
 export const login = async (email, password) => {
   try {    
-    const r = {
+    const credentials = {
       username: email.trim(),
       password: password.trim()
-      
     };
-    const response = await axios.post(`${AUTH_URL}/login`, r);    
-    if (response.data && response.data.jwt) {
-      localStorage.setItem('token', response.data.jwt);
-      localStorage.setItem('user', JSON.stringify({ 
-        email: email,
-        token: response.data.jwt
-      }));
+    
+    const response = await axios.post(`${AUTH_URL}/login`, credentials);    
+    
+    if (!response.data?.jwt) {
+      throw new Error('Authentication failed: No token received');
     }
-    return response.data;
+    localStorage.setItem('token', response.data.jwt);
+    localStorage.setItem('user', JSON.stringify({ 
+      email: email,
+      token: response.data.jwt
+    }));
+    
+    return {
+      success: true,
+      token: response.data.jwt,
+      user: { email }
+    };
+    
   } catch (error) {
-    console.error('Login error:',  error.message);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    if (error.response) {
+      if (error.response.status === 401) {
+        throw new Error('Invalid email or password');
+      } else {
+        throw new Error(error.response.data?.message || 'Authentication failed');
+      }
+    } else if (error.request) {
+      throw new Error('Network error. Please check your connection');
+    } else {
+      throw new Error(error.message || 'Login failed');
+    }
   }
 };
 

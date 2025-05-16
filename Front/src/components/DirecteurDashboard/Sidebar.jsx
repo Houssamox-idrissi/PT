@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FiGrid, FiUsers, FiBarChart2, FiSettings,FiMenu , FiBell, FiChevronLeft, FiChevronRight, FiLogOut, FiSun, FiMoon } from "react-icons/fi";
 import clsx from "clsx";
 import { NavLink } from "react-router-dom";
+import { logout } from "../../services/Agence/authService";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
     { id: "DirecteurDashboard", label: "Dashboard", icon: <FiGrid /> },
@@ -11,12 +13,18 @@ const navItems = [
     { id: "settings", label: "Paramètres", icon: <FiSettings /> },
 ];
 
+
 export default function Sidebar({ activeRoute = "dashboard", onRouteChange, theme = "dark", collapsed, setCollapsed }) {
     const accent = "#d1671b";
     const bg = theme === "dark"
         ? "bg-[#151313] backdrop-blur-xl"
         : "bg-[rgba(247,246,245,0.7)] backdrop-blur-xl";
     const text = theme === "dark" ? "text-[#f7f6f5]" : "text-[#0a0400]";
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        logout();
+        navigate("/agency/login");
+    }
 
     return (
         <aside
@@ -100,7 +108,9 @@ export default function Sidebar({ activeRoute = "dashboard", onRouteChange, them
                     <button className="p-2 rounded-full hover:bg-white/10 text-[#d1671b] focus:outline-none" aria-label="Paramètres">
                         <FiSettings />
                     </button>
-                    <button className="p-2 rounded-full hover:bg-white/10 text-[#d1671b] focus:outline-none" aria-label="Déconnexion">
+                    <button 
+                    onClick={handleLogout}
+                    className="p-2 rounded-full hover:bg-white/10 text-[#d1671b] focus:outline-none" aria-label="Déconnexion">
                         <FiLogOut />
                     </button>
                 </div>
