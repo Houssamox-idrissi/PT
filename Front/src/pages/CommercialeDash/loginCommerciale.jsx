@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiMail, FiLock, FiArrowRight, FiLoader } from "react-icons/fi";
+import { FiMail, FiLock, FiArrowRight, FiLoader, FiHome, FiDollarSign, FiBarChart2 } from "react-icons/fi";
 import { login } from '../../services/Agence/authService';
 
-export default function AgenceLoginForm() {
+export default function CommercialLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,25 +18,25 @@ export default function AgenceLoginForm() {
     try {
       const response = await login(email, password);
       if (response && response.success) {
-        navigate("/DirecteurDashboard");
+        navigate("/CommercialDashboard");
       } else {
-        setError(response?.message || "Invalid email or password");
+        setError(response?.message || "Invalid commercial credentials");
       }
     } catch (err) {
       if (err.response) {
         if (err.response.status === 401) {
-          setError("Invalid email or password");
+          setError("Unauthorized commercial account");
         } else if (err.response.status === 400) {
-          setError("Bad request. Please check your input");
+          setError("Invalid commercial login format");
         } else if (err.response.status === 500) {
-          setError("Server error. Please try again later");
+          setError("Commercial service unavailable");
         } else {
-          setError("An error occurred. Please try again");
+          setError("Commercial login error");
         }
       } else if (err.request) {
-        setError("Network error. Please check your connection");
+        setError("Network connection error");
       } else {
-        setError("Email or password is incorrect");
+        setError("Login processing error");
       }
     } finally {
       setIsLoading(false);
@@ -45,7 +45,7 @@ export default function AgenceLoginForm() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">
-      {/* Left side - Animated Branding */}
+      {/* Left side - Branding */}
       <div className="w-full md:w-1/2 bg-gradient-to-br from-orange-50 to-pink-50 flex flex-col justify-between p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-orange-200 blur-xl"></div>
@@ -56,27 +56,27 @@ export default function AgenceLoginForm() {
           <div className="flex items-center">
             <img 
               src="/logo.png" 
-              alt="Holi Square Logo" 
+              alt="PropertyPro Logo" 
               className="h-12 w-auto"
             />
-            <span className="ml-3 text-2xl font-bold text-orange-600">Holi Square</span>
+            <span className="ml-3 text-2xl font-bold text-orange-600">Square Holy</span>
           </div>
 
           <div className="max-w-md mt-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-4 animate-fade-in">
-              Welcome back, <span className="text-orange-600">Agency</span>
+              Commercial <span className="text-orange-600">Property Hub</span>
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Manage your properties, agents, and client relationships with our professional agency tools.
+              Professional tools for commercial property portfolio management
             </p>
             
             <div className="space-y-4">
               {[
-                "Manage your property portfolio",
-                "Track agent performance",
-                "Access detailed analytics",
-                "Get real-time notifications",
-                "24/7 customer support"
+                "Manage commercial properties",
+                "Track leasing and occupancy",
+                "Analyze financial performance",
+                "Generate investor reports",
+                "24/7 portfolio monitoring"
               ].map((item, index) => (
                 <div 
                   key={index} 
@@ -84,9 +84,9 @@ export default function AgenceLoginForm() {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="flex-shrink-0 h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">
-                    <svg className="h-4 w-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    {index === 0 ? <FiHome className="h-4 w-4 text-orange-500" /> :
+                     index === 1 ? <FiDollarSign className="h-4 w-4 text-orange-500" /> :
+                     <FiBarChart2 className="h-4 w-4 text-orange-500" />}
                   </div>
                   <p className="ml-3 text-gray-600">{item}</p>
                 </div>
@@ -96,16 +96,16 @@ export default function AgenceLoginForm() {
         </div>
 
         <div className="relative z-10 text-sm text-gray-500">
-          © {new Date().getFullYear()} Holi Square. All rights reserved.
+          © {new Date().getFullYear()} PropertyPro. Commercial use only.
         </div>
       </div>
 
-      {/* Right side - Interactive Login Form */}
+      {/* Right side - Login Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12 lg:p-24 bg-white">
         <div className="w-full max-w-md transform hover:scale-[1.01] transition-transform duration-300">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Agency Sign In</h2>
-            <p className="text-gray-500">Enter your agency credentials</p>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">Commercial Portal</h2>
+            <p className="text-gray-500">Professional property management access</p>
           </div>
 
           {error && (
@@ -120,7 +120,7 @@ export default function AgenceLoginForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="group">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 group-hover:text-orange-600 transition-colors">
-                Email
+                Corporate Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors">
@@ -132,7 +132,7 @@ export default function AgenceLoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent hover:border-orange-300 transition-all"
-                  placeholder="agency@example.com"
+                  placeholder="professional@yourcompany.com"
                   required
                 />
               </div>
@@ -140,7 +140,7 @@ export default function AgenceLoginForm() {
 
             <div className="group">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1 group-hover:text-orange-600 transition-colors">
-                Password
+                Secure Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors">
@@ -161,19 +161,19 @@ export default function AgenceLoginForm() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
-                  id="remember-me"
-                  name="remember-me"
+                  id="trusted-device"
+                  name="trusted-device"
                   type="checkbox"
                   className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded hover:border-orange-400 transition-colors"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 hover:text-gray-900 transition-colors">
-                  Remember me
+                <label htmlFor="trusted-device" className="ml-2 block text-sm text-gray-700 hover:text-gray-900 transition-colors">
+                  Remember this device
                 </label>
               </div>
 
               <div className="text-sm">
                 <a href="#" className="font-medium text-orange-600 hover:text-orange-500 transition-colors">
-                  Forgot password?
+                  Reset password?
                 </a>
               </div>
             </div>
@@ -186,24 +186,16 @@ export default function AgenceLoginForm() {
               {isLoading ? (
                 <>
                   <FiLoader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                  Signing in...
+                  Verifying credentials...
                 </>
               ) : (
                 <>
-                  Sign in <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  Access Commercial Portal <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              New agency?{' '}
-              <Link to="/AgenceRegistration" className="font-medium text-orange-600 hover:text-orange-500 transition-colors">
-                Register your agency
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>

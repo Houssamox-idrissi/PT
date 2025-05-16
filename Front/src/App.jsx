@@ -24,6 +24,8 @@ import PropertyLocation from './pages/HostPages/PropertyLocation.jsx';
 import DirecteurDashboard from './pages/DirecteurDashboard/DirecteurDashboard.jsx';
 import Commercial from './pages/DirecteurDashboard/Commercial.jsx';
 import AgenceSide from './pages/Agence/login.jsx';
+import CommercialeDashboard from './pages/CommercialeDash/CommercialeDash.jsx';
+import CommercialSide from './pages/CommercialeDash/loginCommerciale.jsx';
 
 export default function App() {
   return (
@@ -52,7 +54,9 @@ export default function App() {
 
         <Route path="/Commercial" element={<Commercial />} />
         <Route path="/DirecteurDashboard" element={<DirecteurDashboard />} />
+        <Route path="/CommercialeDashboard" element={<CommercialeDashboard />} />
         <Route path="/Agence" element={<AgenceSide />} />
+        <Route path="/Commerciale" element={<CommercialSide />} />
 
         <Route index element={<HomePage />} />
       </Routes>
