@@ -7,8 +7,8 @@ export const registerAgency = async (formData) => {
   const l3aba = {
     nom: formData.nom.trim(),
     tel: formData.tel.trim(),
-    email: formData.email.trim(),
-    directeurName: formData.directeurName.trim(),
+    directeurFirstName: formData.directeurFirstName.trim(),
+    directeurLastName: formData.directeurLastName.trim(),
     directeurEmail: formData.directeurEmail.trim(),
     directeurPassword: formData.directeurPassword
   };

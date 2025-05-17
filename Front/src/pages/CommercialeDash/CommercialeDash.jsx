@@ -10,7 +10,7 @@ import { dakhl } from "../../services/Agence/authService";
 import { useNavigate } from "react-router-dom";
 import SidebarCommerciale from "../../components/CommercialeDash/SidebarCommerciale";
 
-export default function DirecteurDashboard() {
+export default function CommercialeDash() {
   const navigate = useNavigate();
   const [theme, setTheme] = useState("dark");
   const [activeRoute, setActiveRoute] = useState("dashboard");

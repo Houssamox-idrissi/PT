@@ -139,7 +139,6 @@ export default function PropertyPrice() {
         description: propertyData.description.trim(),
         nombreOfChambres: nombreOfChambres,
         pricePerNight: pricePerNight,
-        employeId: 8,
         equipement: Array.isArray(propertyData.equipement) ? propertyData.equipement.map(e => e.trim()).filter(Boolean) : [],
         imagesBase64: processedImages
       };
@@ -157,6 +156,7 @@ export default function PropertyPrice() {
 
       const config = {
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },

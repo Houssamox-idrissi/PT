@@ -6,7 +6,7 @@ const CommercialCard = ({ commercial, onEdit, onDelete }) => {
     <div className="rounded-2xl p-6 border border-white/10 shadow-xl group relative overflow-hidden bg-[#312b2b] transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:bg-[#372f2f] min-h-[180px]">
       <div className="mb-3">
         <div className="text-xl font-bold text-[#f2eded] group-hover:underline">
-          {commercial.name}
+          {commercial.firstName} {commercial.lastName}
         </div>
         <div className="text-sm text-gray-400 mb-1">{commercial.role}</div>
       </div>

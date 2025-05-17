@@ -6,7 +6,8 @@ const API_URL = "http://localhost:8080/api/employees";
 // POST 
 export const registerEmployee = async (formData) => {
   const employee = {
-    name: formData.name.trim(),
+    firstName: formData.firstName.trim(),
+    lastName: formData.lastName.trim(),
     email: formData.email.trim(),
     password: formData.password,
     role: formData.role,
@@ -19,10 +20,20 @@ export const registerEmployee = async (formData) => {
 
 // GET 
 export const getAllEmployees = async () => {
-  const response = await axios.get(API_URL,{
-    headers: getAuthHeader()
-  });
-  return response.data;
+  try {
+    const response = await axios.get(API_URL, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Full error object:', error);
+    if (error.response) {
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+      console.error('Response headers:', error.response.headers);
+    }
+    throw error; // Re-throw after logging
+  }
 };
 
 // GET 

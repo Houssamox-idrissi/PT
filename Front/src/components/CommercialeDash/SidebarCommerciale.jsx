@@ -6,7 +6,7 @@ import { logout } from "../../services/Agence/authService";
 import { useNavigate } from "react-router-dom";
 
 const navItems = [
-    { id: "DirecteurDashboard", label: "Dashboard", icon: <FiGrid /> },
+    { id: "CommercialeDashboard", label: "Dashboard", icon: <FiGrid /> },
     { id: "Logements", label: "Logements", icon: <FiUsers /> },
     { id: "analytics", label: "Analytique", icon: <FiBarChart2 /> },
     { id: "notifications", label: "Notifications", icon: <FiBell />, },

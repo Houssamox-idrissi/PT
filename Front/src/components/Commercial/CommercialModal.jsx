@@ -30,8 +30,20 @@ const CommercialModal = ({
             <label className="block mb-2">Nom</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="firstName"
+              value={formData.firstName}
+              onChange={onInputChange}
+              className="w-full px-4 py-2 bg-[#473e3e] rounded-lg text-white"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-2">Prenom</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
               onChange={onInputChange}
               className="w-full px-4 py-2 bg-[#473e3e] rounded-lg text-white"
               required

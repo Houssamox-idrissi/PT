@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/DirecteurDashboard/Sidebar";
-import { useNavigate } from "react-router-dom";     
+import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { FiSearch, FiPlus } from "react-icons/fi";
-import { 
+import {
   getAllEmployees,
   registerEmployee,
   updateEmployee,
   deleteEmployee
 } from "../../services/Commérciaux/EmployeeService";
-import { dakhl } from "../../services/Agence/authService";
+import { dakhl, getAuthHeader } from "../../services/Agence/authService";
 import CommercialModal from "../../components/Commercial/CommercialModal";
 import CommercialCard from "../../components/Commercial/CommercialCard";
 import LoadingScreen from "../../components/loading/loadin";
@@ -25,39 +25,43 @@ export default function Commercial() {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName : "",
     email: "",
     password: "",
     role: "COMMERCIAL",
-    agenceId: 2,
+    agenceId: 1,
   });
-  const accent = "#d1671b";
+
   const Gray = "#473e3e";
 
   //T2akd mn auth
   useEffect(() => {
-    const checkAuth = async () => {
-      if (!dakhl()) {
-        navigate('/agency/login');
-        return;
+    const checkAuth = () => {
+      const token = localStorage.getItem('token'); 
+      if (!token) {
+        navigate('/login'); 
       }
-      fetchEmployees();
     };
-
+  
     checkAuth();
-  }, []);
+  }, [navigate]); 
 
   const fetchEmployees = async () => {
     try {
       setLoading(true);
       const data = await getAllEmployees();
       setEmployees(data);
-      setLoading(false);
     } catch (error) {
       setError(error.message);
+    } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
 
   const handleAddCommercial = async (e) => {
     e.preventDefault();
@@ -97,7 +101,8 @@ export default function Commercial() {
   const handleEditClick = (commercial) => {
     setEditingId(commercial.id);
     setFormData({
-      name: commercial.name,
+      firstName: commercial.firstName,
+      lastName: commercial.lastName,
       email: commercial.email,
       password: "",
       role: commercial.role,
@@ -108,7 +113,8 @@ export default function Commercial() {
 
   const resetForm = () => {
     setFormData({
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       role: "COMMERCIAL",
@@ -126,7 +132,8 @@ export default function Commercial() {
 
   const filtered = employees.filter(
     (c) =>
-      (c.name && c.name.toLowerCase().includes(search.toLowerCase())) ||
+      (c.firstName && c.firstName.toLowerCase().includes(search.toLowerCase())) ||
+      (c.lastName && c.lastName.toLowerCase().includes(search.toLowerCase())) ||
       (c.email && c.email.toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -134,7 +141,7 @@ export default function Commercial() {
     return <LoadingScreen theme={theme} sidebarCollapsed={sidebarCollapsed} />;
   }
 
-  
+
   return (
     <div className={clsx(
       theme === "dark" ? "bg-[#1a1818] text-[#f7f6f5]" : "bg-[#f7f6f5] text-[#0a0400]",
@@ -142,7 +149,7 @@ export default function Commercial() {
     )}>
       <Sidebar
         activeRoute="Commercial"
-        theme={theme} 
+        theme={theme}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />

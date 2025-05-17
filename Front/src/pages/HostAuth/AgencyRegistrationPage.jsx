@@ -7,8 +7,8 @@ export default function AgencyRegistrationPage() {
   const [formData, setFormData] = useState({
     nom: "",
     tel: "",
-    email: "",
-    directeurName: "",
+    directeurFirstName: "",
+    directeurLastName: "",
     directeurEmail: "",
     directeurPassword: "",
     confirmPassword: ""
@@ -28,13 +28,13 @@ export default function AgencyRegistrationPage() {
         throw new Error("Les mots de passe ne correspondent pas");
       }
 
-      if (!formData.nom || !formData.tel || !formData.email || 
-          !formData.directeurName || !formData.directeurEmail || !formData.directeurPassword) {
+      if (!formData.nom || !formData.tel || 
+        !formData.directeurFirstName || !formData.directeurLastName || !formData.directeurEmail || !formData.directeurPassword) {
         throw new Error("Tous les champs sont obligatoires");
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email) || !emailRegex.test(formData.directeurEmail)) {
+      if (!emailRegex.test(formData.directeurEmail)) {
         throw new Error("Format d'email invalide");
       }
 
@@ -45,7 +45,7 @@ export default function AgencyRegistrationPage() {
 
       const agency = await registerAgency(formData);
       localStorage.setItem("agency", JSON.stringify(agency));
-      navigate("/dashboard");
+      navigate("/DirecteurDashboard");
 
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Une erreur est survenue");
@@ -67,12 +67,12 @@ export default function AgencyRegistrationPage() {
           <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-orange-200 blur-xl"></div>
           <div className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-pink-200 blur-xl"></div>
         </div>
-        
+
         <div className="relative z-10">
           <div className="flex items-center">
-            <img 
-              src="/logo.png" 
-              alt="Logo Holi Square" 
+            <img
+              src="/logo.png"
+              alt="Logo Holi Square"
               className="h-12 w-auto"
             />
             <span className="ml-3 text-2xl font-bold text-orange-600">Holi Square</span>
@@ -85,7 +85,7 @@ export default function AgencyRegistrationPage() {
             <p className="text-lg text-gray-600 mb-8">
               Inscrivez votre agence immobilière et commencez à gérer vos biens efficacement.
             </p>
-            
+
             <div className="space-y-4">
               {[
                 "Gérez plusieurs propriétés",
@@ -94,8 +94,8 @@ export default function AgencyRegistrationPage() {
                 "Recevez des notifications en temps réel",
                 "Support client 24/7"
               ].map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="flex items-start animate-fade-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
@@ -175,27 +175,6 @@ export default function AgencyRegistrationPage() {
               </div>
             </div>
 
-            <div className="group">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 group-hover:text-orange-600 transition-colors">
-                Email *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors">
-                  <FiMail className="h-5 w-5" />
-                </div>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent hover:border-orange-300 transition-all"
-                  placeholder="Entrez l'adresse email"
-                  required
-                />
-              </div>
-            </div>
-
             {/* Director Information */}
             <div className="group">
               <label htmlFor="directeurName" className="block text-sm font-medium text-gray-700 mb-1 group-hover:text-orange-600 transition-colors">
@@ -207,9 +186,30 @@ export default function AgencyRegistrationPage() {
                 </div>
                 <input
                   type="text"
-                  id="directeurName"
-                  name="directeurName"
-                  value={formData.directeurName}
+                  id="directeurFirstName"
+                  name="directeurFirstName"
+                  value={formData.directeurFirstName}
+                  onChange={handleChange}
+                  className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent hover:border-orange-300 transition-all"
+                  placeholder="Entrez le nom du directeur"
+                  required
+                />
+              </div>
+              {/* last name */}
+            </div>
+            <div className="group">
+              <label htmlFor="directeurName" className="block text-sm font-medium text-gray-700 mb-1 group-hover:text-orange-600 transition-colors">
+                Prenom du Directeur *
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors">
+                  <FiUser className="h-5 w-5" />
+                </div>
+                <input
+                  type="text"
+                  id="directeurLastName"
+                  name="directeurLastName"
+                  value={formData.directeurLastName}
                   onChange={handleChange}
                   className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent hover:border-orange-300 transition-all"
                   placeholder="Entrez le nom du directeur"

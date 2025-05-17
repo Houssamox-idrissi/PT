@@ -65,3 +65,7 @@ export const getAuthHeader = () => {
 export const dakhl = () => {
   return !!localStorage.getItem('token');
 };
+
+export const jibToken = () => {
+  return localStorage.getItem('token');
+}
