@@ -26,6 +26,7 @@ import Commercial from './pages/DirecteurDashboard/Commercial.jsx';
 import AgenceSide from './pages/Agence/login.jsx';
 import CommercialeDashboard from './pages/CommercialeDash/CommercialeDash.jsx';
 import CommercialSide from './pages/CommercialeDash/loginCommerciale.jsx';
+import Logements from './pages/CommercialeDash/Logements.jsx';
 
 export default function App() {
   return (
@@ -57,6 +58,8 @@ export default function App() {
         <Route path="/CommercialeDashboard" element={<CommercialeDashboard />} />
         <Route path="/Agence" element={<AgenceSide />} />
         <Route path="/Commerciale" element={<CommercialSide />} />
+        <Route path="/Logements" element={<Logements />} />
+
 
         <Route index element={<HomePage />} />
       </Routes>

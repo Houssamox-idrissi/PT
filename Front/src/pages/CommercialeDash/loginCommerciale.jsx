@@ -18,7 +18,7 @@ export default function CommercialLoginForm() {
     try {
       const response = await login(email, password);
       if (response && response.success) {
-        navigate("/CommercialDashboard");
+        navigate("/CommercialeDashboard");
       } else {
         setError(response?.message || "Invalid commercial credentials");
       }

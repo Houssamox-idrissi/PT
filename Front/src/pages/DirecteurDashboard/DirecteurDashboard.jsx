@@ -42,9 +42,7 @@ export default function DirecteurDashboard() {
           <KPIWidgets />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-8 mb-8">
             <ChartCard />
-            <NotificationsCard />
           </div>
-          <EmployeeTable />
         </div>
       </main>
     </div>

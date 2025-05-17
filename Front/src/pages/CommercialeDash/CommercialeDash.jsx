@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Sidebar from "../../components/DirecteurDashboard/Sidebar";
 import Topbar from "../../components/DirecteurDashboard/Topbar";
 import KPIWidgets from "../../components/DirecteurDashboard/KPIWidgets";
 import ChartCard from "../../components/DirecteurDashboard/ChartCard";
@@ -9,6 +8,7 @@ import clsx from "clsx";
 import { useEffect } from "react";
 import { dakhl } from "../../services/Agence/authService";
 import { useNavigate } from "react-router-dom";
+import SidebarCommerciale from "../../components/CommercialeDash/SidebarCommerciale";
 
 export default function DirecteurDashboard() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export default function DirecteurDashboard() {
       theme === "dark" ? "bg-[#0a0400] text-[#f7f6f5]" : "bg-[#f7f6f5] text-[#0a0400]",
       "min-h-screen flex"
     )}>
-      <Sidebar activeRoute={activeRoute} onRouteChange={setActiveRoute} theme={theme}
+      <SidebarCommerciale activeRoute={activeRoute} onRouteChange={setActiveRoute} theme={theme}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
