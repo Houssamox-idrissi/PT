@@ -7,9 +7,9 @@ import {
   getAllEmployees,
   registerEmployee,
   updateEmployee,
-  deleteEmployee
+  deleteEmployee,
+  getAgenceBYCommercial
 } from "../../services/Commérciaux/EmployeeService";
-import { dakhl, getAuthHeader } from "../../services/Agence/authService";
 import CommercialModal from "../../components/Commercial/CommercialModal";
 import CommercialCard from "../../components/Commercial/CommercialCard";
 import LoadingScreen from "../../components/loading/loadin";
@@ -47,10 +47,10 @@ export default function Commercial() {
     checkAuth();
   }, [navigate]); 
 
-  const fetchEmployees = async () => {
+  const fetchEmployeesByCommercials = async () => {
     try {
       setLoading(true);
-      const data = await getAllEmployees();
+      const data = await getAgenceBYCommercial();
       setEmployees(data);
     } catch (error) {
       setError(error.message);
@@ -60,7 +60,7 @@ export default function Commercial() {
   };
 
   useEffect(() => {
-    fetchEmployees();
+    fetchEmployeesByCommercials();
   }, []);
 
   const handleAddCommercial = async (e) => {

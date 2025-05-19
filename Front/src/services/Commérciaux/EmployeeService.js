@@ -2,6 +2,7 @@ import axios from "axios";
 import { getAuthHeader } from "../Agence/authService";
 
 const API_URL = "http://localhost:8080/api/employees";
+const API_ByCommercial = "http://localhost:8080/api/employees/commercials";
 
 // POST 
 export const registerEmployee = async (formData) => {
@@ -14,7 +15,9 @@ export const registerEmployee = async (formData) => {
     agenceId: formData.agenceId,
   };
 
-  const response = await axios.post(API_URL, employee);
+  const response = await axios.post(API_URL, employee,{
+    headers: getAuthHeader()
+  });
   return response.data;
 };
 
@@ -35,6 +38,23 @@ export const getAllEmployees = async () => {
     throw error; // Re-throw after logging
   }
 };
+
+export const getAgenceBYCommercial = async () => {
+  try {
+    const response = await axios.get(API_ByCommercial, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Full error object:', error);
+    if (error.response) {
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+      console.error('Response headers:', error.response.headers);
+    }
+    throw error;
+  }
+}
 
 // GET 
 export const getEmployeeById = async (id) => {

@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { getAuthHeader } from '../Agence/authService';
 
 const API_URL = "http://localhost:8080/api/logements";
+const API_ByCommercial = "http://localhost:8080/api/logements/my-logements";
 export const getLogements = async () => {
     try {
         const response = await axios.get(API_URL);
@@ -11,9 +13,11 @@ export const getLogements = async () => {
     }
 }; 
 
-export const getLogementsByCommercialToken = async (CommercialToken) => {
+export const getLogementsByCommercialToken = async () => {
     try {
-        const response = await axios.get(`${API_URL}/${CommercialToken}`);
+        const response = await axios.get(API_ByCommercial, {
+            headers: getAuthHeader()
+        });
         return response.data;
     } catch (error) {
         console.error("Error fetching logements by user ID:", error);
