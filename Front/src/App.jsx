@@ -38,8 +38,8 @@ export default function App() {
         <Route path="/RegisterVoyageur" element={<RegisterVoyageurePage />} />
         <Route path="/AgenceRegistration" element={<AgenceRegistrationForm />} />
         <Route path="/agency/login" element={<AgenceLoginPage />} />
+        
         <Route path="/BecomeHost" element={<BecomeHost />} />
-
         <Route path="/AddingProperty" element={<PropertyProvider><PropertyRegistrationPage /></PropertyProvider>} />
         <Route path="/About-your-place" element={<PropertyProvider><AboutPlace /></PropertyProvider>} />
         <Route path="/Structure" element={<PropertyProvider><PropertyType /></PropertyProvider>} />
@@ -55,9 +55,10 @@ export default function App() {
 
         <Route path="/Commercial" element={<Commercial />} />
         <Route path="/DirecteurDashboard" element={<DirecteurDashboard />} />
-        <Route path="/CommercialeDashboard" element={<CommercialeDashboard />} />
         <Route path="/Agence" element={<AgenceSide />} />
-        <Route path="/Commerciale" element={<CommercialSide />} />
+        
+        <Route path="/CommercialeDashboard" element={<CommercialeDashboard />} />
+        <Route path="/CommercialLogin" element={<CommercialSide />} />
         <Route path="/Logements" element={<Logements />} />
 
 

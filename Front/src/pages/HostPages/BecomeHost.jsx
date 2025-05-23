@@ -10,7 +10,7 @@ export default function BecomeHost() {
           <Link to="/" className="text-black">
             <img src="/logo.png" alt="Holi Square" className="h-13" />
           </Link>
-          <Link to="/" className="text-gray-900 hover:text-gray-700 font-medium text-base">
+          <Link to="/logements" className="text-gray-900 hover:text-gray-700 font-medium text-base">
             Quitter
           </Link>
         </div>

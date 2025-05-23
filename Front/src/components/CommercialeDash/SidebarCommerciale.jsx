@@ -23,7 +23,7 @@ export default function SidebarCommerciale({ activeRoute = "dashboard", onRouteC
     const navigate = useNavigate();
     const handleLogout = () => {
         logout();
-        navigate("/agency/login");
+        navigate("/CommercialLogin");
     }
 
     return (

@@ -19,7 +19,7 @@ export default function CommercialeDash() {
   //t2akd mn auth
   useEffect(() => {
     if (!dakhl()) {
-      navigate('/agency/login');
+      navigate('/CommercialLogin');
       return;
     }
   }, [navigate]);
