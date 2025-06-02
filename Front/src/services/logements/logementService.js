@@ -3,6 +3,7 @@ import { getAuthHeader } from '../Agence/authService';
 
 const API_URL = "http://localhost:8080/api/logements";
 const API_ByCommercial = "http://localhost:8080/api/logements/my-logements";
+
 export const getLogements = async () => {
     try {
         const response = await axios.get(API_URL);
@@ -21,6 +22,16 @@ export const getLogementsByCommercialToken = async () => {
         return response.data;
     } catch (error) {
         console.error("Error fetching logements by user ID:", error);
+        throw error;
+    }
+};
+
+export const getLogementById = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching logement by ID:", error);
         throw error;
     }
 };

@@ -67,7 +67,7 @@ export default function Commercial() {
     e.preventDefault();
     try {
       await registerEmployee(formData);
-      fetchEmployees();
+      fetchEmployeesByCommercials();
       setShowModal(false);
       resetForm();
     } catch (err) {
@@ -79,7 +79,7 @@ export default function Commercial() {
     e.preventDefault();
     try {
       await updateEmployee(editingId, formData);
-      fetchEmployees();
+      fetchEmployeesByCommercials();
       setEditingId(null);
       resetForm();
     } catch (err) {
@@ -91,7 +91,7 @@ export default function Commercial() {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce commercial ?")) {
       try {
         await deleteEmployee(id);
-        fetchEmployees();
+        fetchEmployeesByCommercials();
       } catch (err) {
         setError(err.message);
       }
