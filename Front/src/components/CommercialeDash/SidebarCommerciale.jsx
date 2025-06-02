@@ -13,6 +13,8 @@ const navItems = [
     { id: "settings", label: "Paramètres", icon: <FiSettings /> },
 ];
 
+const userName = localStorage.getItem("userName")
+
 
 export default function SidebarCommerciale({ activeRoute = "dashboard", onRouteChange, theme = "dark", collapsed, setCollapsed }) {
     const accent = "#d1671b";
