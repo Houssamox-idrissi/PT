@@ -83,12 +83,6 @@ export default function Logements() {
             <p className="text-2xl font-bold">{logements.length}</p>
           </div>
           <div className={`bg-[${colors.cardBg}] p-4 rounded-lg shadow`}>
-            <p className="text-gray-400">Active</p>
-            <p className="text-2xl font-bold">
-              {logements.filter((l) => l.status === "active").length}
-            </p>
-          </div>
-          <div className={`bg-[${colors.cardBg}] p-4 rounded-lg shadow`}>
             <p className="text-gray-400">Avg. Price</p>
             <p className="text-2xl font-bold">
               {logements.length > 0

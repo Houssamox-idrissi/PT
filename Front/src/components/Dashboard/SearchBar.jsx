@@ -104,7 +104,7 @@ export default function SearchBar({ onSearch, scrolled }) {
   return (
     <div className={`flex justify-center items-center transition-all duration-300 ${scrolled ? 'py-0' : 'py-4'}`}>
       <div className={`w-full transition-all duration-300 ${scrolled ? 'scale-100' : 'max-w-3xl scale-100'}`}>
-        <div className="relative" ref={containerRef}>
+        <div  className="bg-[#fcfcfc] relative" ref={containerRef}>
           <div className={`bg-white rounded-full shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl`}>
             <div className="flex flex-col md:flex-row items-center">
               <div

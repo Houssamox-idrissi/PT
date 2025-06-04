@@ -15,7 +15,7 @@ export const registerEmployee = async (formData) => {
     agenceId: formData.agenceId,
   };
 
-  const response = await axios.post(API_URL, employee,{
+  const response = await axios.post(API_URL, employee, {
     headers: getAuthHeader()
   });
   return response.data;
@@ -65,14 +65,17 @@ export const getEmployeeById = async (id) => {
 // PUT
 export const updateEmployee = async (id, formData) => {
   const employee = {
-    name: formData.name.trim(),
+    firstName: formData.firstName.trim(),
+    lastName: formData.lastName.trim(),
     email: formData.email.trim(),
     password: formData.password,
     role: formData.role,
     agenceId: formData.agenceId,
   };
 
-  const response = await axios.put(`${API_URL}/${id}`, employee);
+  const response = await axios.put(`${API_URL}/${id}`, employee, {
+    headers: getAuthHeader()
+  });
   return response.data;
 };
 

@@ -62,6 +62,7 @@ export default function App() {
         <Route path="/CommercialLogin" element={<CommercialSide />} />
         <Route path="/Logements" element={<Logements />} />
         <Route path='logement-details/:id' element={<LogementDetail />} />
+        <Route path='commercials/:id' element={<LogementDetail />} />
 
 
         <Route index element={<HomePage />} />

@@ -1,87 +1,92 @@
 import React, { useState, useEffect } from 'react';
 import PropertyCard from './PropertyCard';
-
-const sampleProperties = [
-  {
-    id: 1,
-    title: 'Luxury Riad with Pool',
-    location: 'Islande',
-    dates: '10-15 mai',
-    pricePerNight: 715,
-    rating: '4,94',
-    image: '/test.png'
-  },
-  {
-    id: 2,
-    title: 'Desert View Villa',
-    location: 'Vestnes, Norvège',
-    dates: '2-7 mai',
-    pricePerNight: 632,
-    rating: '5,0',
-    image: '/test.png'
-  },
-  {
-    id: 3,
-    title: 'Traditional House',
-    location: 'Enontekiö, Finlande',
-    dates: '1-6 oct.',
-    pricePerNight: 593,
-    rating: '4,96',
-    image: '/test.png'
-  },
-  {
-    id: 4,
-    title: 'Modern Retreat',
-    location: 'Molde, Norvège',
-    dates: '1-6 mai',
-    pricePerNight: 569,
-    rating: '4,97',
-    image: '/test.png'
-  },
-  {
-    id: 5,
-    title: 'Cozy Cabin',
-    location: 'Blåmolia, Norvège',
-    dates: '1-6 mai',
-    pricePerNight: 486,
-    rating: '4,86',
-    image: '/test.png'
-  }
-];
+import { getLogements } from '../../services/logements/logementService';
 
 export default function PropertiesGrid({ searchParams }) {
-  const [properties, setProperties] = useState(sampleProperties);
+  const [allProperties, setAllProperties] = useState([]); 
+  const [filteredProperties, setFilteredProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchLogement = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await getLogements();
+      if (data && Array.isArray(data)) {
+        setAllProperties(data);
+        applyFilters(data); 
+      } else {
+        setAllProperties([]);
+        setFilteredProperties([]);
+        setError('Invalid data format received');
+      }
+    } catch (error) {
+      console.error("Error fetching logements:", error);
+      setError('Failed to load properties. Please try again later.');
+      setAllProperties([]);
+      setFilteredProperties([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const applyFilters = (properties) => {
+    if (!searchParams || Object.keys(searchParams).length === 0) {
+      setFilteredProperties(properties);
+      return;
+    }
+
+    const filtered = properties.filter(property => {
+      if (searchParams.location) {
+        const searchLocation = searchParams.location.toLowerCase();
+        const propertyLocation = (
+          (property.address.country || '') +
+          (property.address.city || '')
+        ).toLowerCase();
+
+        if (!propertyLocation.includes(searchLocation)) {
+          return false;
+        }
+      }
+
+      if (searchParams.startDate && searchParams.endDate) {
+        const startDate = new Date(searchParams.startDate);
+        const endDate = new Date(searchParams.endDate);
+
+        if (property.availableDates) {
+          const availableStart = new Date(property.availableDates.start);
+          const availableEnd = new Date(property.availableDates.end);
+
+          if (startDate < availableStart || endDate > availableEnd) {
+            return false;
+          }
+        }
+      }
+
+      if (searchParams.guests) {
+        if (property.capacity < parseInt(searchParams.guests)) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    setFilteredProperties(filtered);
+  };
 
   useEffect(() => {
-    if (searchParams) {
-      setIsLoading(true);
-      // Simulate API call (replace with actual API call)
-      setTimeout(() => {
-        const filteredProperties = sampleProperties.filter(property => {
-          // Filter by location if provided
-          if (searchParams.location && !property.location.toLowerCase().includes(searchParams.location.toLowerCase())) {
-            return false;
-          }
-          // Filter by date range if provided
-          if (searchParams.startDate && searchParams.endDate) {
-            // Add date filtering logic here
-            return true;
-          }
-          // Filter by guests if provided
-          if (searchParams.guests && property.bedrooms < searchParams.guests) {
-            return false;
-          }
-          return true;
-        });
-        setProperties(filteredProperties);
-        setIsLoading(false);
-      }, 1000);
+    fetchLogement();
+  }, []); 
+
+  useEffect(() => {
+    if (allProperties.length > 0) {
+      applyFilters(allProperties);
     }
   }, [searchParams]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className=" bg-[#fcfcfc] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
         <h1 className="text-[32px] font-semibold text-[#222222]">
           Nos Propriétés Exclusives
@@ -96,15 +101,35 @@ export default function PropertiesGrid({ searchParams }) {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
           <p className="mt-4 text-gray-600">Recherche en cours...</p>
         </div>
-      ) : properties.length === 0 ? (
+      ) : error ? (
+        <div className="text-center">
+          <p className="text-red-500 text-lg">{error}</p>
+          <button
+            onClick={fetchLogement}
+            className="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
+          >
+            Réessayer
+          </button>
+        </div>
+      ) : filteredProperties.length === 0 ? (
         <div className="text-center">
           <p className="text-gray-600 text-lg">Aucune propriété ne correspond à vos critères de recherche.</p>
+          {allProperties.length > 0 && (
+            <button
+              onClick={() => setFilteredProperties(allProperties)}
+              className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
+            >
+              Afficher toutes les propriétés
+            </button>
+          )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-          {properties.map(property => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
+        <div className="max-w-full px-4 sm:px-">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6  gap-4">
+            {filteredProperties.map(property => (
+              <PropertyCard key={property.id} property={property} />
+            ))}
+          </div>
         </div>
       )}
     </div>
