@@ -28,6 +28,7 @@ import CommercialeDashboard from './pages/CommercialeDash/CommercialeDash.jsx';
 import CommercialSide from './pages/CommercialeDash/loginCommerciale.jsx';
 import Logements from './pages/CommercialeDash/Logements.jsx';
 import LogementDetail from './pages/CommercialeDash/LogementDetail.jsx';
+import CommercialDetail from './pages/DirecteurDashboard/CommercialDetail.jsx';
 
 export default function App() {
   return (
@@ -62,7 +63,7 @@ export default function App() {
         <Route path="/CommercialLogin" element={<CommercialSide />} />
         <Route path="/Logements" element={<Logements />} />
         <Route path='logement-details/:id' element={<LogementDetail />} />
-        <Route path='commercials/:id' element={<LogementDetail />} />
+        <Route path='commercials/:id' element={<CommercialDetail />} />
 
 
         <Route index element={<HomePage />} />
