@@ -7,7 +7,7 @@ import {
     FiUser, FiMessageSquare, FiChevronDown, FiLoader
 } from "react-icons/fi";
 import { dakhl } from "../../services/Agence/authService";
-import { getLogementById } from "../../services/logements/logementService";
+import { getLogementById, ModifyLogement } from "../../services/logements/logementService";
 
 export default function LogementDetails() {
     const navigate = useNavigate();
@@ -16,17 +16,6 @@ export default function LogementDetails() {
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // Color palette matching your style
-    const colors = {
-        primary: "#312b2b",
-        secondary: "#473e3e",
-        accent: "#5a4f4f",
-        text: "#f7f6f5",
-        background: "#0a0400",
-        cardBg: "#1a1a1a",
-        hover: "#3d3636",
-    };
 
     // Form state
     const [formData, setFormData] = useState({
@@ -49,7 +38,6 @@ export default function LogementDetails() {
         imagesBase64: []
     });
 
-    const [newEquipment, setNewEquipment] = useState("");
     const [newImage, setNewImage] = useState(null);
 
     useEffect(() => {
@@ -66,7 +54,13 @@ export default function LogementDetails() {
         try {
             setIsLoading(true);
             const data = await getLogementById(id);
-            setFormData(data);
+            // Ensure equipement is an array and imagesBase64 exists
+            const formattedData = {
+                ...data,
+                equipement: Array.isArray(data.equipement) ? data.equipement : [],
+                imagesBase64: data.imagesBase64 || []
+            };
+            setFormData(formattedData);
             setIsLoading(false);
         } catch (error) {
             setError(error.message);
@@ -93,14 +87,21 @@ export default function LogementDetails() {
         }));
     };
 
-    const handleAddEquipment = () => {
-        if (newEquipment.trim() && !formData.equipement.includes(newEquipment.trim())) {
-            setFormData(prev => ({
-                ...prev,
-                equipement: [...prev.equipement, newEquipment.trim()]
-            }));
-            setNewEquipment("");
-        }
+    const handleToggleAmenity = (amenity) => {
+        setFormData(prev => {
+            const currentAmenities = Array.isArray(prev.equipement) ? prev.equipement : [];
+            if (currentAmenities.includes(amenity)) {
+                return {
+                    ...prev,
+                    equipement: currentAmenities.filter(item => item !== amenity)
+                };
+            } else {
+                return {
+                    ...prev,
+                    equipement: [...currentAmenities, amenity]
+                };
+            }
+        });
     };
 
     const handleRemoveEquipment = (index) => {
@@ -115,9 +116,10 @@ export default function LogementDetails() {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1];
                 setFormData(prev => ({
                     ...prev,
-                    imagesBase64: [...prev.imagesBase64, reader.result.split(',')[1]]
+                    imagesBase64: [...prev.imagesBase64, base64String]
                 }));
             };
             reader.readAsDataURL(file);
@@ -135,47 +137,29 @@ export default function LogementDetails() {
         e.preventDefault();
         try {
             setIsLoading(true);
-            await updateLogement(id, formData);
+            // Ensure equipement is properly formatted
+            const submissionData = {
+                ...formData,
+                equipement: Array.isArray(formData.equipement) ? formData.equipement : []
+            };
+            await ModifyLogement(id, submissionData);
             setIsEditing(false);
             setIsLoading(false);
-            navigate("/logements");
+            fetchLogement(); // Refresh data after successful update
         } catch (error) {
             setError(error.message);
             setIsLoading(false);
         }
     };
 
-    if (isLoading) {
-        return (
-            <div className={`flex items-center justify-center h-screen bg-[${colors.background}]`}>
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[${colors.primary}]"></div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className={`flex flex-col items-center justify-center h-screen bg-[${colors.background}] text-[${colors.text}]`}>
-                <h2 className="text-2xl font-bold mb-4">Error Loading Logement</h2>
-                <p className="mb-6">{error}</p>
-                <button
-                    onClick={() => navigate("/logements")}
-                    className={`bg-[${colors.primary}] hover:bg-[${colors.hover}] text-white px-6 py-2 rounded-lg flex items-center gap-2`}
-                >
-                    <FiArrowLeft /> Back to Logements
-                </button>
-            </div>
-        );
-    }
-
     return (
-        <div className={`bg-[${colors.background}] text-[${colors.text}] min-h-screen`}>
+        <div className="bg-[#0a0400] text-[#f7f6f5] min-h-screen">
             <div className="container mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
                     <button
                         onClick={() => navigate("/logements")}
-                        className={`bg-[${colors.primary}] hover:bg-[${colors.hover}] text-white px-4 py-2 rounded-lg flex items-center gap-2`}
+                        className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2"
                     >
                         <FiArrowLeft /> Back
                     </button>
@@ -183,7 +167,7 @@ export default function LogementDetails() {
                     {!isEditing ? (
                         <button
                             onClick={() => setIsEditing(true)}
-                            className={`bg-[${colors.primary}] hover:bg-[${colors.hover}] text-white px-4 py-2 rounded-lg flex items-center gap-2`}
+                            className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2"
                         >
                             Edit Logement
                         </button>
@@ -191,13 +175,13 @@ export default function LogementDetails() {
                         <div className="flex gap-2">
                             <button
                                 onClick={() => setIsEditing(false)}
-                                className={`bg-[${colors.secondary}] hover:bg-[${colors.hover}] text-white px-4 py-2 rounded-lg`}
+                                className="bg-[#473e3e] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className={`bg-[${colors.primary}] hover:bg-[${colors.hover}] text-white px-4 py-2 rounded-lg flex items-center gap-2`}
+                                className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2"
                                 disabled={isLoading}
                             >
                                 <FiSave /> {isLoading ? "Saving..." : "Save Changes"}
@@ -207,7 +191,7 @@ export default function LogementDetails() {
                 </div>
 
                 {/* Main Content */}
-                <div className={`bg-[${colors.cardBg}] rounded-lg shadow-lg overflow-hidden`}>
+                <div className="bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden">
                     {/* Image Gallery */}
                     <div className="relative h-64 w-full overflow-hidden">
                         {formData.imagesBase64.length > 0 ? (
@@ -219,13 +203,13 @@ export default function LogementDetails() {
                                 />
                             </div>
                         ) : (
-                            <div className="flex items-center justify-center h-full bg-[${colors.secondary}]">
+                            <div className="flex items-center justify-center h-full bg-[#473e3e]">
                                 <span className="text-gray-400">No images available</span>
                             </div>
                         )}
                         {isEditing && (
                             <div className="absolute bottom-4 right-4">
-                                <label className={`bg-[${colors.primary}] hover:bg-[${colors.hover}] text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer`}>
+                                <label className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer">
                                     <FiUpload /> Upload Image
                                     <input
                                         type="file"
@@ -243,11 +227,11 @@ export default function LogementDetails() {
                         {isEditing ? (
                             <form onSubmit={handleSubmit} className="space-y-8">
                                 {/* Form Grid Layout */}
-                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                     {/* Card 1: Basic Information */}
-                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
-                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-accent/30 flex items-center">
-                                            <span className="bg-primary/10 text-primary px-2 py-1 rounded-md mr-2">1</span>
+                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
+                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
+                                            <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">1</span>
                                             Logement Information
                                         </h3>
 
@@ -259,7 +243,7 @@ export default function LogementDetails() {
                                                     name="title"
                                                     value={formData.title}
                                                     onChange={handleInputChange}
-                                                    className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                    className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                     required
                                                 />
                                             </div>
@@ -271,7 +255,7 @@ export default function LogementDetails() {
                                                         name="type"
                                                         value={formData.type}
                                                         onChange={handleInputChange}
-                                                        className="w-full bg-[#302b2b] text-white border border-accent/30 rounded-lg px-4 py-3 appearance-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                        className="w-full bg-[#302b2b] text-white border border-[#5a4f4f]/30 rounded-lg px-4 py-3 appearance-none focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                     >
                                                         <option value="Maison">House</option>
                                                         <option value="Appartement">Apartment</option>
@@ -284,7 +268,6 @@ export default function LogementDetails() {
                                                 </div>
                                             </div>
 
-
                                             <div className="form-group">
                                                 <label className="block text-sm font-medium mb-1 text-gray-300">Description</label>
                                                 <textarea
@@ -292,7 +275,7 @@ export default function LogementDetails() {
                                                     value={formData.description}
                                                     onChange={handleInputChange}
                                                     rows="4"
-                                                    className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                    className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                     placeholder="Tell guests about your space..."
                                                 />
                                             </div>
@@ -300,9 +283,9 @@ export default function LogementDetails() {
                                     </div>
 
                                     {/* Card 2: Pricing & Capacity */}
-                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
-                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-accent/30 flex items-center">
-                                            <span className="bg-primar/10 text-primary px-2 py-1 rounded-md mr-2">2</span>
+                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
+                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
+                                            <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">2</span>
                                             Pricing & Capacity
                                         </h3>
 
@@ -317,7 +300,7 @@ export default function LogementDetails() {
                                                         value={formData.pricePerNight}
                                                         onChange={handleInputChange}
                                                         min="0"
-                                                        className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 pl-8 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                        className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 pl-8 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                         required
                                                     />
                                                 </div>
@@ -334,7 +317,7 @@ export default function LogementDetails() {
                                                             value={formData.capacity}
                                                             onChange={handleInputChange}
                                                             min="1"
-                                                            className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 pl-10 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                            className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 pl-10 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                             required
                                                         />
                                                     </div>
@@ -350,7 +333,7 @@ export default function LogementDetails() {
                                                             value={formData.nombreOfChambres}
                                                             onChange={handleInputChange}
                                                             min="1"
-                                                            className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 pl-10 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                            className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 pl-10 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                             required
                                                         />
                                                     </div>
@@ -360,9 +343,9 @@ export default function LogementDetails() {
                                     </div>
 
                                     {/* Card 3: Address */}
-                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
-                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-accent/30 flex items-center">
-                                            <span className="bg-primary/10 text-primary px-2 py-1 rounded-md mr-2">3</span>
+                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
+                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
+                                            <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">3</span>
                                             Location Details
                                         </h3>
 
@@ -374,7 +357,7 @@ export default function LogementDetails() {
                                                     name="street"
                                                     value={formData.address.street}
                                                     onChange={handleAddressChange}
-                                                    className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                    className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                 />
                                             </div>
 
@@ -386,7 +369,7 @@ export default function LogementDetails() {
                                                         name="city"
                                                         value={formData.address.city}
                                                         onChange={handleAddressChange}
-                                                        className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                        className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                     />
                                                 </div>
 
@@ -397,7 +380,7 @@ export default function LogementDetails() {
                                                         name="postalCode"
                                                         value={formData.address.postalCode}
                                                         onChange={handleAddressChange}
-                                                        className="w-full bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                                                        className="w-full bg-[#302b2b] border border-[#5a4f4f]/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#312b2b]/50 focus:border-[#312b2b] transition-all"
                                                     />
                                                 </div>
                                             </div>
@@ -405,43 +388,57 @@ export default function LogementDetails() {
                                     </div>
 
                                     {/* Card 4: Amenities */}
-                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
-                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-accent/30 flex items-center">
-                                            <span className="bg-primary/10 text-primary px-2 py-1 rounded-md mr-2">4</span>
+                                    <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
+                                        <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
+                                            <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">4</span>
                                             Amenities
                                         </h3>
 
                                         <div className="space-y-5">
                                             <div className="form-group">
-                                                <label className="block text-sm font-medium mb-1 text-gray-300">Add Amenities</label>
-                                                <div className="flex gap-2">
-                                                    <input
-                                                        type="text"
-                                                        value={newEquipment}
-                                                        onChange={(e) => setNewEquipment(e.target.value)}
-                                                        placeholder="WiFi, Parking, etc."
-                                                        className="flex-1 bg-[#302b2b] border border-accent/30 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleAddEquipment}
-                                                        className="bg-[#302b2b] hover:bg-primary/90 text-white px-4 py-3 rounded-lg flex items-center justify-center transition-colors"
-                                                        disabled={!newEquipment.trim()}
-                                                    >
-                                                        <FiPlus />
-                                                    </button>
+                                                <label className="block text-sm font-medium mb-1 text-gray-300">Select Amenities</label>
+
+                                                {/* Available Amenities Checkboxes */}
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                                                    {['wifi', 'pool', 'parking', 'tv', 'kitchen'].map((amenity) => (
+                                                        <label
+                                                            key={amenity}
+                                                            className={`flex items-center space-x-2 p-3 rounded-lg border ${formData.equipement.includes(amenity)
+                                                                ? 'border-[#312b2b] bg-[#312b2b]/10'
+                                                                : 'border-[#5a4f4f]/30 bg-[#302b2b] hover:bg-[#3a3434]'}`}
+                                                        >
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={formData.equipement.includes(amenity)}
+                                                                onChange={() => handleToggleAmenity(amenity)}
+                                                                className="hidden"
+                                                            />
+                                                            <div className={`w-5 h-5 rounded border flex items-center justify-center 
+                                                                ${formData.equipement.includes(amenity)
+                                                                    ? 'bg-[#312b2b] border-[#312b2b]'
+                                                                    : 'border-gray-400'}`}>
+                                                                {formData.equipement.includes(amenity) && (
+                                                                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                                    </svg>
+                                                                )}
+                                                            </div>
+                                                            <span className="capitalize">{amenity}</span>
+                                                        </label>
+                                                    ))}
                                                 </div>
                                             </div>
 
+                                            {/* Current Amenities Display */}
                                             <div className="space-y-2">
-                                                <h4 className="text-sm font-medium text-gray-300">Current Amenities</h4>
+                                                <h4 className="text-sm font-medium text-gray-300">Selected Amenities</h4>
                                                 {formData.equipement.length > 0 ? (
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                         {formData.equipement.map((item, index) => (
-                                                            <div key={index} className="flex justify-between items-center bg-[#302b2b]                                               px-4 py-2 rounded-lg border border-accent/20">
+                                                            <div key={index} className="flex justify-between items-center bg-[#302b2b] px-4 py-2 rounded-lg border border-[#5a4f4f]/20">
                                                                 <span className="flex items-center">
                                                                     <FiCheckCircle className="text-green-400 mr-2" />
-                                                                    {item}
+                                                                    <span className="capitalize">{item}</span>
                                                                 </span>
                                                                 <button
                                                                     type="button"
@@ -454,7 +451,7 @@ export default function LogementDetails() {
                                                         ))}
                                                     </div>
                                                 ) : (
-                                                    <p className="text-sm text-gray-400 italic">No amenities added yet</p>
+                                                    <p className="text-sm text-gray-400 italic">No amenities selected yet</p>
                                                 )}
                                             </div>
                                         </div>
@@ -462,9 +459,9 @@ export default function LogementDetails() {
                                 </div>
 
                                 {/* Image Management Card */}
-                                <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
-                                    <h3 className="text-xl font-bold mb-6 pb-2 border-b border-accent/30 flex items-center">
-                                        <span className="bg-primary/10 text-primary px-2 py-1 rounded-md mr-2">5</span>
+                                <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
+                                    <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
+                                        <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">5</span>
                                         Property Photos
                                     </h3>
 
@@ -490,7 +487,7 @@ export default function LogementDetails() {
                                                 </div>
                                             ))}
 
-                                            <label className="w-full sm:w-48 h-48 flex flex-col items-center justify-center border-2 border-dashed border-accent/30 rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+                                            <label className="w-full sm:w-48 h-48 flex flex-col items-center justify-center border-2 border-dashed border-[#5a4f4f]/30 rounded-lg cursor-pointer hover:border-[#312b2b]/50 transition-colors">
                                                 <FiUpload className="text-2xl text-gray-400 mb-2" />
                                                 <span className="text-sm text-gray-400">Upload Photo</span>
                                                 <input
@@ -506,17 +503,17 @@ export default function LogementDetails() {
                                 </div>
 
                                 {/* Form Actions */}
-                                <div className="flex justify-end gap-4 pt-4 border-t border-accent/20">
+                                <div className="flex justify-end gap-4 pt-4 border-t border-[#5a4f4f]/20">
                                     <button
                                         type="button"
                                         onClick={() => setIsEditing(false)}
-                                        className=" bg-[#262222] px-6 py-3 rounded-lg hover:bg-secondary/50 transition-colors"
+                                        className="bg-[#262222] px-6 py-3 rounded-lg hover:bg-[#473e3e]/50 transition-colors"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-6 py-3 rounded-lg bg-[#262222] hover:bg-primary/90 text-white flex items-center gap-2 transition-colors"
+                                        className="px-6 py-3 rounded-lg bg-[#312b2b] hover:bg-[#312b2b]/90 text-white flex items-center gap-2 transition-colors"
                                         disabled={isLoading}
                                     >
                                         {isLoading ? (
@@ -541,18 +538,18 @@ export default function LogementDetails() {
                                     <div>
                                         <h2 className="text-3xl font-bold">{formData.title}</h2>
                                         <div className="flex items-center flex-wrap gap-2 mt-3">
-                                            <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                            <span className="bg-[#312b2b]/10 text-[#312b2b] px-3 py-1 rounded-full text-sm font-medium flex items-center">
                                                 <FiHome className="mr-1" /> {formData.type}
                                             </span>
-                                            <span className="bg-secondary/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                            <span className="bg-[#473e3e]/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
                                                 <FiUsers className="mr-1" /> {formData.capacity} guests
                                             </span>
-                                            <span className="bg-secondary/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                            <span className="bg-[#473e3e]/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
                                                 <FiLayers className="mr-1" /> {formData.nombreOfChambres} bedrooms
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="text-3xl font-bold bg-primary/10 px-4 py-3 rounded-lg">
+                                    <div className="text-3xl font-bold bg-[#312b2b]/10 px-4 py-3 rounded-lg">
                                         {formData.pricePerNight}€ <span className="text-base font-normal text-gray-400">/ night</span>
                                     </div>
                                 </div>
@@ -584,9 +581,9 @@ export default function LogementDetails() {
                                     {/* Left Column */}
                                     <div className="lg:col-span-2 space-y-8">
                                         {/* Description */}
-                                        <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
+                                        <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                                <FiAlignLeft className="text-primary" />
+                                                <FiAlignLeft className="text-[#312b2b]" />
                                                 Description
                                             </h3>
                                             <p className="whitespace-pre-line text-gray-300">{formData.description || "No description provided"}</p>
@@ -594,18 +591,18 @@ export default function LogementDetails() {
 
                                         {/* Amenities */}
                                         {formData.equipement.length > 0 && (
-                                            <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
+                                            <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                                    <FiCheckCircle className="text-primary" />
+                                                    <FiCheckCircle className="text-[#312b2b]" />
                                                     Amenities
                                                 </h3>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     {formData.equipement.map((item, index) => (
                                                         <div key={index} className="flex items-center gap-3">
-                                                            <div className="bg-primary/10 p-2 rounded-full">
-                                                                <FiCheck className="text-primary" />
+                                                            <div className="bg-[#312b2b]/10 p-2 rounded-full">
+                                                                <FiCheck className="text-[#312b2b]" />
                                                             </div>
-                                                            <span className="text-gray-300">{item}</span>
+                                                            <span className="text-gray-300 capitalize">{item}</span>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -616,9 +613,9 @@ export default function LogementDetails() {
                                     {/* Right Column */}
                                     <div className="space-y-8">
                                         {/* Location */}
-                                        <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-accent/20">
+                                        <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                                <FiMapPin className="text-primary" />
+                                                <FiMapPin className="text-[#312b2b]" />
                                                 Location
                                             </h3>
                                             <address className="not-italic space-y-2 text-gray-300">

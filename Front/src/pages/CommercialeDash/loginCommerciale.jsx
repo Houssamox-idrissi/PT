@@ -17,9 +17,12 @@ export default function CommercialLoginForm() {
     
     try {
       const response = await login(email, password);
-      if (response && response.success) {
+      if (response && response.success && response.role === "COMMERCIAL") {
         navigate("/CommercialeDashboard");
-      } else {
+      } 
+        if(!response.role || response.role !== "COMMERCIAL") {
+          setError("Unauthorized access. Please log in with a commercial account.");
+        } else if (response?.message) {
         setError(response?.message || "Invalid commercial credentials");
       }
     } catch (err) {

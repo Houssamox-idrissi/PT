@@ -23,6 +23,7 @@ export const login = async (email, password) => {
     return {
       success: true,
       token: response.data.jwt,
+      role : response.data.role,
       user: { email }
     };
     

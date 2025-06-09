@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import SidebarCommerciale from "../../components/CommercialeDash/SidebarCommerciale";
-import { getLogementsByCommercialToken } from "../../services/logements/logementService";
+import { getLogementsByCommercialToken, deleteLogement } from "../../services/logements/logementService";
 import { FiPlusCircle } from "react-icons/fi";
 import { dakhl } from "../../services/Agence/authService";
 import LogementCard from "../../components/Commercial/LogementCard"; 
@@ -32,7 +32,7 @@ export default function Logements() {
     };
     checkAuth();
   }, [navigate]);
-
+  
   const fetchLogements = async () => {
     try {
       setLoading(true);
@@ -42,6 +42,25 @@ export default function Logements() {
       console.error("Error fetching logements:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteSuccess = async (deletedLogementId) => {
+    try {
+      // Optimistic UI update
+      setLogements(prevLogements => 
+        prevLogements.filter(logement => logement.id !== deletedLogementId)
+      );
+      
+      // Then actually delete from server
+      await deleteLogement(deletedLogementId);
+      
+      // Optional: Refetch to ensure sync with server
+      // await fetchLogements();
+    } catch (error) {
+      console.error("Error deleting logement:", error);
+      // Revert if error occurs
+      fetchLogements();
     }
   };
 
@@ -113,12 +132,16 @@ export default function Logements() {
         {/* Logements Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {logements.map((logement) => (
-            <LogementCard key={logement.id} logement={logement} />
+            <LogementCard 
+              key={logement.id} 
+              logement={logement} 
+              onDeleteSuccess={() => handleDeleteSuccess(logement.id)}
+            />
           ))}
         </div>
 
         {/* Empty State */}
-        {logements.length === 0 && (
+        {logements.length === 0 && !loading && (
           <div className="flex flex-col items-center justify-center py-12">
             <img
               src="/empty-state.svg"

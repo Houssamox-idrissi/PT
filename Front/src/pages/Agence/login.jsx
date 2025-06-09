@@ -32,14 +32,17 @@ export default function AgenceLoginForm() {
     
     try {
       const response = await login(email, password);
-      if (response && response.success) {
+      if (response && response.success && response.role === "DIRECTEUR") {
         setLoggedIn(true);
-        setTimeout(() => navigate("/DirecteurDashboard"), 1500); // Smooth transition
-      } else {
+        setTimeout(() => navigate("/DirecteurDashboard"), 1500); 
+      } 
+      if (!response.role || response.role !== "DIRECTEUR") {
+        setError("Unauthorized access. Please log in with a directeur account.");
+      }
+      else {
         setError(response?.message || "Invalid email or password");
       }
     } catch (err) {
-      // Error handling remains the same
     } finally {
       setIsLoading(false);
     }

@@ -167,7 +167,7 @@ export default function PropertyPrice() {
       const response = await api.post('/api/logements', propertyToSubmit, config);
       
       if (response.status === 201 || response.status === 200) {
-        navigate('/');
+        navigate('/Logements');
       } else {
         throw new Error('Unexpected response status: ' + response.status);
       }

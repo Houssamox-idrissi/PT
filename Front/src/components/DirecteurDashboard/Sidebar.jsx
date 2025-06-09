@@ -1,30 +1,66 @@
-import React, { useState } from "react";
-import { FiGrid, FiUsers, FiBarChart2, FiSettings,FiMenu , FiBell, FiChevronLeft, FiChevronRight, FiLogOut, FiSun, FiMoon } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import {
+    FiGrid,
+    FiUsers,
+    FiSettings,
+    FiMenu,
+    FiBell,
+    FiLogOut,
+} from "react-icons/fi";
 import clsx from "clsx";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../../services/Agence/authService";
-import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-const navItems = [
-    { id: "DirecteurDashboard", label: "Dashboard", icon: <FiGrid /> },
-    { id: "Commercial", label: "Commérciaux", icon: <FiUsers /> },
-    { id: "analytics", label: "Analytique", icon: <FiBarChart2 /> },
-    { id: "notifications", label: "Notifications", icon: <FiBell />, },
-    { id: "settings", label: "Paramètres", icon: <FiSettings /> },
-];
-
-
-export default function Sidebar({ activeRoute = "dashboard", onRouteChange, theme = "dark", collapsed, setCollapsed }) {
-    const accent = "#d1671b";
-    const bg = theme === "dark"
-        ? "bg-[#151313] backdrop-blur-xl"
-        : "bg-[rgba(247,246,245,0.7)] backdrop-blur-xl";
-    const text = theme === "dark" ? "text-[#f7f6f5]" : "text-[#0a0400]";
+export default function Sidebar({
+    activeRoute = "dashboard",
+    theme = "dark",
+    collapsed,
+    setCollapsed,
+}) {
+    const [userName, setUserName] = useState("");
     const navigate = useNavigate();
+
+    const navItems = [
+        { id: "DirecteurDashboard", label: "Dashboard", icon: <FiGrid /> },
+        { id: "Commercial", label: "Commérciaux", icon: <FiUsers /> },
+        { id: "notifications", label: "Notifications", icon: <FiBell /> },
+        { id: "settings", label: "Paramètres", icon: <FiSettings /> },
+    ];
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (token && typeof token === "string") {
+            try {
+                const decodedToken = jwtDecode(token);
+
+                const capitalize = (str) =>
+                    str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
+
+                const firstName = capitalize(decodedToken.firstName);
+                const lastName = capitalize(decodedToken.lastName);
+                setUserName(`${firstName} ${lastName}`);
+            } catch (error) {
+                console.error("Invalid token:", error.message);
+                navigate("/login");
+            }
+        } else {
+            navigate("/login");
+        }
+    }, [navigate]);
+
+    const accent = "#d1671b";
+    const bg =
+        theme === "dark"
+            ? "bg-[#151313] backdrop-blur-xl"
+            : "bg-[rgba(247,246,245,0.7)] backdrop-blur-xl";
+    const text = theme === "dark" ? "text-[#f7f6f5]" : "text-[#0a0400]";
+
     const handleLogout = () => {
         logout();
         navigate("/agency/login");
-    }
+    };
 
     return (
         <aside
@@ -40,7 +76,12 @@ export default function Sidebar({ activeRoute = "dashboard", onRouteChange, them
             {/* Logo and collapse button */}
             {collapsed ? (
                 <div className="flex flex-col items-center justify-center px-0 py-6">
-                    <img src="/logo.png" alt="Logo" className="rounded-full w-12 h-12 border-3 mb-4" style={{ borderColor: accent }} />
+                    <img
+                        src="/logo.png"
+                        alt="Logo"
+                        className="rounded-full w-12 h-12 border-3 mb-4"
+                        style={{ borderColor: accent }}
+                    />
                     <button
                         aria-label="Expand sidebar"
                         onClick={() => setCollapsed(false)}
@@ -51,7 +92,12 @@ export default function Sidebar({ activeRoute = "dashboard", onRouteChange, them
                 </div>
             ) : (
                 <div className="flex items-center justify-between px-6 py-6">
-                    <img src="/logo.png" alt="Logo" className="rounded-full w-12 h-12 border-3" style={{ borderColor: accent }} />
+                    <img
+                        src="/logo.png"
+                        alt="Logo"
+                        className="rounded-full w-12 h-12 border-3"
+                        style={{ borderColor: accent }}
+                    />
                     <button
                         aria-label="Collapse sidebar"
                         onClick={() => setCollapsed(true)}
@@ -61,32 +107,36 @@ export default function Sidebar({ activeRoute = "dashboard", onRouteChange, them
                     </button>
                 </div>
             )}
+
             {/* Navigation */}
             <nav className="flex-1 flex flex-col gap-2 mt-4">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.id}
                         to={`/${item.id}`}
-                        className={({ isActive }) => clsx(
-                            "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 relative group",
-                            isActive
-                                ? `bg-[${accent}] bg-opacity-80 text-white shadow-lg`
-                                : "hover:bg-white/10 hover:text-white",
-                            collapsed ? "justify-center px-2" : ""
-                        )}
+                        className={({ isActive }) =>
+                            clsx(
+                                "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 relative group",
+                                isActive
+                                    ? `bg-[${accent}] bg-opacity-80 text-white shadow-lg`
+                                    : "hover:bg-white/10 hover:text-white",
+                                collapsed ? "justify-center px-2" : ""
+                            )
+                        }
                         aria-current={activeRoute === item.id ? "page" : undefined}
                         aria-label={item.label}
                         end
                     >
-                        <span className="relative flex items-center">
-                            {item.icon}
-                        </span>
-                        {!collapsed && <span className="ml-2 font-medium text-base">{item.label}</span>}
+                        <span className="relative flex items-center">{item.icon}</span>
+                        {!collapsed && (
+                            <span className="ml-2 font-medium text-base">{item.label}</span>
+                        )}
                     </NavLink>
                 ))}
             </nav>
+
             {/* User card */}
-            <div className="flex flex-col items-center p-6 ">
+            <div className="flex flex-col items-center p-6">
                 <img
                     src="/profile.png"
                     alt="User Avatar"
@@ -97,20 +147,26 @@ export default function Sidebar({ activeRoute = "dashboard", onRouteChange, them
                         "filter-none  dark:invert"
                     )}
                 />
-
                 {!collapsed && (
                     <>
-                        <span className="text-[#d1671b] text-sm font-semibold mb-1">Directeur Houssam</span>
+                        <span className="text-[#d1671b] text-sm font-semibold mb-1">
+                            {userName}
+                        </span>
                         <span className="text-xs text-[#f7f6f5]/60 mb-2">Directeur</span>
                     </>
                 )}
                 <div className="flex space-x-2 mt-2">
-                    <button className="p-2 rounded-full hover:bg-white/10 text-[#d1671b] focus:outline-none" aria-label="Paramètres">
+                    <button
+                        className="p-2 rounded-full hover:bg-white/10 text-[#d1671b] focus:outline-none"
+                        aria-label="Paramètres"
+                    >
                         <FiSettings />
                     </button>
-                    <button 
-                    onClick={handleLogout}
-                    className="p-2 rounded-full hover:bg-white/10 text-[#d1671b] focus:outline-none" aria-label="Déconnexion">
+                    <button
+                        onClick={handleLogout}
+                        className="p-2 rounded-full hover:bg-white/10 text-[#d1671b] focus:outline-none"
+                        aria-label="Déconnexion"
+                    >
                         <FiLogOut />
                     </button>
                 </div>

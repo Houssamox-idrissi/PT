@@ -13,7 +13,19 @@ export const getLogements = async () => {
         console.error("Error fetching employees:", error);
         throw error;
     }
-}; 
+};
+
+export const ModifyLogement = async (id, formData) => {
+    try {
+        const response = await axios.put(`${API_URL}/${id}`, formData, {
+            headers: getAuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error updating logement:", error);
+        throw error;
+    }
+}
 
 export const getLogementsByCommercialToken = async () => {
     try {
@@ -47,6 +59,18 @@ export const getLogementById = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching logement by ID:", error);
+        throw error;
+    }
+};
+
+export const deleteLogement = async (id) => {
+    try {
+        const response = await axios.delete(`${API_URL}/${id}`, {
+            headers: getAuthHeader()
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting logement:", error);
         throw error;
     }
 };

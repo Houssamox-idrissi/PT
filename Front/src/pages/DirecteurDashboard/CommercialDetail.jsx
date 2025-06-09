@@ -9,6 +9,7 @@ import {
 import { getLogementById, getLogementsByCommercialId } from "../../services/logements/logementService";
 import LoadingScreen from "../../components/loading/loadin";
 import PropertyCard from "../../components/Dashboard/PropertyCard"; // Reuse your PropertyCard component
+import LogementCard from "../../components/Commercial/LogementCard";
 
 export default function CommercialDetail() {
     const { id } = useParams();
@@ -126,8 +127,6 @@ export default function CommercialDetail() {
                                 <h2 className="text-xl font-semibold mb-4">Informations Personnelles</h2>
                                 <div className="space-y-3">
                                     <p><span className="font-semibold">Email:</span> {commercial.email}</p>
-                                    <p><span className="font-semibold">Agence:</span> {commercial.agenceId || "Non spécifiée"}</p>
-                                    <p><span className="font-semibold">Date d'ajout:</span> {new Date(commercial.createdAt).toLocaleDateString()}</p>
                                 </div>
                             </div>
 
@@ -135,7 +134,6 @@ export default function CommercialDetail() {
                                 <h2 className="text-xl font-semibold mb-4">Statistiques</h2>
                                 <div className="space-y-3">
                                     <p><span className="font-semibold">Nombre de logements:</span> {logements.length}</p>
-                                    <p><span className="font-semibold">Dernière mise à jour:</span> {new Date(commercial.updatedAt).toLocaleDateString()}</p>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +149,7 @@ export default function CommercialDetail() {
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {logements.map(logement => (
-                                    <PropertyCard key={logement.id} property={logement} />
+                                    <LogementCard key={logement.id} logement={logement} />
                                     
                                 ))}
                             </div>
