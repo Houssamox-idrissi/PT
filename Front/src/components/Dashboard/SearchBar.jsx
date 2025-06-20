@@ -8,7 +8,8 @@ import '../../styles/calendar.css';
 export default function SearchBar({ onSearch, scrolled }) {
   const [activeField, setActiveField] = useState(null);
   const [where, setWhere] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [guests, setGuests] = useState(1);
@@ -24,8 +25,10 @@ export default function SearchBar({ onSearch, scrolled }) {
     }
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const handleDateChange = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
     setShowCalendar(false);
     setActiveField(null);
   };
@@ -37,13 +40,14 @@ export default function SearchBar({ onSearch, scrolled }) {
     }
   };
 
-  const formatDate = () => {
-    if (!selectedDate) return 'Sélectionner une date';
-    return selectedDate.toLocaleDateString('fr', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+  const formatDateRange = () => {
+    if (!startDate) return 'Sélectionner des dates';
+    if (!endDate) return startDate.toLocaleDateString('fr', { day: 'numeric', month: 'long' });
+    
+    const startStr = startDate.toLocaleDateString('fr', { day: 'numeric', month: 'short' });
+    const endStr = endDate.toLocaleDateString('fr', { day: 'numeric', month: 'short', year: startDate.getFullYear() !== endDate.getFullYear() ? 'numeric' : undefined });
+    
+    return `${startStr} - ${endStr}`;
   };
 
   const handleClickOutside = (e) => {
@@ -62,7 +66,8 @@ export default function SearchBar({ onSearch, scrolled }) {
     setIsSearching(true);
     const searchParams = {
       location: where,
-      date: selectedDate ? selectedDate.toISOString() : null,
+      startDate: startDate ? startDate.toISOString() : null,
+      endDate: endDate ? endDate.toISOString() : null,
       guests: guests
     };
     if (onSearch) {
@@ -104,7 +109,7 @@ export default function SearchBar({ onSearch, scrolled }) {
   return (
     <div className={`flex justify-center items-center transition-all duration-300 ${scrolled ? 'py-0' : 'py-4'}`}>
       <div className={`w-full transition-all duration-300 ${scrolled ? 'scale-100' : 'max-w-3xl scale-100'}`}>
-        <div  className="bg-[#fcfcfc] relative" ref={containerRef}>
+        <div className="bg-[#fcfcfc] relative" ref={containerRef}>
           <div className={`bg-white rounded-full shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl`}>
             <div className="flex flex-col md:flex-row items-center">
               <div
@@ -140,11 +145,11 @@ export default function SearchBar({ onSearch, scrolled }) {
                   <FiCalendar className={`text-gray-500 mr-2 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-base'}`} />
                   <div className="w-full">
                     <div className={`text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 transition-all duration-300 ${scrolled ? 'hidden' : 'block'}`}>
-                      Quand ?
+                      Dates
                     </div>
                     <div className="flex items-center justify-between">
                       <span className={`text-gray-800 transition-all duration-300 ${scrolled ? 'text-sm' : 'text-sm'}`}>
-                        {formatDate()}
+                        {formatDateRange()}
                       </span>
                       {activeField === 'when' ? <FiChevronUp className="text-gray-400" /> : <FiChevronDown className="text-gray-400" />}
                     </div>
@@ -187,8 +192,11 @@ export default function SearchBar({ onSearch, scrolled }) {
           {showCalendar && activeField === 'when' && (
             <div className="absolute left-1/2 transform -translate-x-1/2 z-50 mt-2 bg-white p-4 rounded-xl shadow-lg border border-gray-200">
               <DatePicker
-                selected={selectedDate}
+                selected={startDate}
                 onChange={handleDateChange}
+                startDate={startDate}
+                endDate={endDate}
+                selectsRange
                 inline
                 locale={fr}
                 renderCustomHeader={CustomHeader}
@@ -197,6 +205,7 @@ export default function SearchBar({ onSearch, scrolled }) {
                 showYearDropdown
                 dropdownMode="select"
                 dateFormat="dd/MM/yyyy"
+                minDate={new Date()}
               />
             </div>
           )}

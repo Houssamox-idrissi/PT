@@ -6,6 +6,7 @@ import LoginAdminPage from './pages/AdminAuth/LoginAdminPage.jsx';
 import PropertyRegistrationPage from './pages/ProprietaireAuth/PropertyRegistrationPage.jsx';
 import AgenceRegistrationForm from './pages/HostAuth/AgencyRegistrationPage.jsx';
 import AgenceLoginPage from './pages/HostAuth/AgenceLoginForm.jsx';
+import LogementDetailVoy from './pages/Reservation/LogementDetailVoy.jsx';
 
 import MainLayout from './layouts/MainLayout.jsx';
 import HomePage from './pages/HomePage/HomePage';
@@ -29,6 +30,7 @@ import CommercialSide from './pages/CommercialeDash/loginCommerciale.jsx';
 import Logements from './pages/CommercialeDash/Logements.jsx';
 import LogementDetail from './pages/CommercialeDash/LogementDetail.jsx';
 import CommercialDetail from './pages/DirecteurDashboard/CommercialDetail.jsx';
+import Dash from './pages/CommercialeDash/dash.jsx';
 
 export default function App() {
   return (
@@ -55,7 +57,10 @@ export default function App() {
         <Route path="/Property-Price" element={<PropertyProvider><PropertyPrice /></PropertyProvider>} />
         <Route path="/Property-Location" element={<PropertyProvider><PropertyLocation /></PropertyProvider>} />
 
+
         <Route path="/Commercial" element={<Commercial />} />
+        <Route path="/dash" element={<Dash />} />
+        
         <Route path="/DirecteurDashboard" element={<DirecteurDashboard />} />
         <Route path="/Agence" element={<AgenceSide />} />
         
@@ -64,6 +69,7 @@ export default function App() {
         <Route path="/Logements" element={<Logements />} />
         <Route path='logement-details/:id' element={<LogementDetail />} />
         <Route path='commercials/:id' element={<CommercialDetail />} />
+        <Route path='/property/:id' element={<LogementDetailVoy />} />
 
 
         <Route index element={<HomePage />} />

@@ -18,28 +18,28 @@ export default function CommercialLoginForm() {
     try {
       const response = await login(email, password);
       if (response && response.success && response.role === "COMMERCIAL") {
-        navigate("/CommercialeDashboard");
+        navigate("/Logements");
       } 
-        if(!response.role || response.role !== "COMMERCIAL") {
-          setError("Unauthorized access. Please log in with a commercial account.");
-        } else if (response?.message) {
-        setError(response?.message || "Invalid commercial credentials");
+      if(!response.role || response.role !== "COMMERCIAL") {
+        setError("Accès non autorisé. Veuillez vous connecter avec un compte commercial.");
+      } else if (response?.message) {
+        setError(response?.message || "Identifiants commerciaux invalides");
       }
     } catch (err) {
       if (err.response) {
         if (err.response.status === 401) {
-          setError("Unauthorized commercial account");
+          setError("Compte commercial non autorisé");
         } else if (err.response.status === 400) {
-          setError("Invalid commercial login format");
+          setError("Format de connexion commerciale invalide");
         } else if (err.response.status === 500) {
-          setError("Commercial service unavailable");
+          setError("Service commercial indisponible");
         } else {
-          setError("Commercial login error");
+          setError("Erreur de connexion commerciale");
         }
       } else if (err.request) {
-        setError("Network connection error");
+        setError("Erreur de connexion réseau");
       } else {
-        setError("Login processing error");
+        setError("Erreur de traitement de la connexion");
       }
     } finally {
       setIsLoading(false);
@@ -48,7 +48,7 @@ export default function CommercialLoginForm() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">
-      {/* Left side - Branding */}
+      {/* Côté gauche - Marque */}
       <div className="w-full md:w-1/2 bg-gradient-to-br from-orange-50 to-pink-50 flex flex-col justify-between p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-orange-200 blur-xl"></div>
@@ -59,7 +59,7 @@ export default function CommercialLoginForm() {
           <div className="flex items-center">
             <img 
               src="/logo.png" 
-              alt="PropertyPro Logo" 
+              alt="Logo Square Holy" 
               className="h-12 w-auto"
             />
             <span className="ml-3 text-2xl font-bold text-orange-600">Square Holy</span>
@@ -67,19 +67,17 @@ export default function CommercialLoginForm() {
 
           <div className="max-w-md mt-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-4 animate-fade-in">
-              Commercial <span className="text-orange-600">Property Hub</span>
+              Espace <span className="text-orange-600">Commercial</span>
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Professional tools for commercial property portfolio management
+              Outils professionnels pour la gestion de portefeuilles immobiliers commerciaux
             </p>
             
             <div className="space-y-4">
               {[
-                "Manage commercial properties",
-                "Track leasing and occupancy",
-                "Analyze financial performance",
-                "Generate investor reports",
-                "24/7 portfolio monitoring"
+                "Gérez vos propriétés",
+                "Suivez les locations et occupations",
+                "Analysez les performances financières",
               ].map((item, index) => (
                 <div 
                   key={index} 
@@ -99,16 +97,16 @@ export default function CommercialLoginForm() {
         </div>
 
         <div className="relative z-10 text-sm text-gray-500">
-          © {new Date().getFullYear()} PropertyPro. Commercial use only.
+          © {new Date().getFullYear()} Square Holy. Usage commercial uniquement.
         </div>
       </div>
 
-      {/* Right side - Login Form */}
+      {/* Côté droit - Formulaire de connexion */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12 lg:p-24 bg-white">
         <div className="w-full max-w-md transform hover:scale-[1.01] transition-transform duration-300">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Commercial Portal</h2>
-            <p className="text-gray-500">Professional property management access</p>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">Portail Commercial</h2>
+            <p className="text-gray-500">Accès professionnel à la gestion immobilière</p>
           </div>
 
           {error && (
@@ -123,7 +121,7 @@ export default function CommercialLoginForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="group">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 group-hover:text-orange-600 transition-colors">
-                Corporate Email
+                Email Professionnel
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors">
@@ -135,7 +133,7 @@ export default function CommercialLoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent hover:border-orange-300 transition-all"
-                  placeholder="professional@yourcompany.com"
+                  placeholder="professionnel@votresociete.com"
                   required
                 />
               </div>
@@ -143,7 +141,7 @@ export default function CommercialLoginForm() {
 
             <div className="group">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1 group-hover:text-orange-600 transition-colors">
-                Secure Password
+                Mot de passe sécurisé
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors">
@@ -170,14 +168,14 @@ export default function CommercialLoginForm() {
                   className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded hover:border-orange-400 transition-colors"
                 />
                 <label htmlFor="trusted-device" className="ml-2 block text-sm text-gray-700 hover:text-gray-900 transition-colors">
-                  Remember this device
+                  Se souvenir de cet appareil
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-orange-600 hover:text-orange-500 transition-colors">
-                  Reset password?
-                </a>
+                <Link to="/forgot-password" className="font-medium text-orange-600 hover:text-orange-500 transition-colors">
+                  Mot de passe oublié ?
+                </Link>
               </div>
             </div>
 
@@ -189,16 +187,15 @@ export default function CommercialLoginForm() {
               {isLoading ? (
                 <>
                   <FiLoader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                  Verifying credentials...
+                  Vérification des identifiants...
                 </>
               ) : (
                 <>
-                  Access Commercial Portal <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  Accéder au Portail Commercial <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
           </form>
-
         </div>
       </div>
     </div>

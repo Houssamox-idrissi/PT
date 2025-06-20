@@ -161,7 +161,7 @@ export default function LogementDetails() {
                         onClick={() => navigate("/logements")}
                         className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2"
                     >
-                        <FiArrowLeft /> Back
+                        <FiArrowLeft /> Retour
                     </button>
 
                     {!isEditing ? (
@@ -169,7 +169,7 @@ export default function LogementDetails() {
                             onClick={() => setIsEditing(true)}
                             className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2"
                         >
-                            Edit Logement
+                            Modifier le logement
                         </button>
                     ) : (
                         <div className="flex gap-2">
@@ -177,14 +177,14 @@ export default function LogementDetails() {
                                 onClick={() => setIsEditing(false)}
                                 className="bg-[#473e3e] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg"
                             >
-                                Cancel
+                                Annuler
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2"
                                 disabled={isLoading}
                             >
-                                <FiSave /> {isLoading ? "Saving..." : "Save Changes"}
+                                <FiSave /> {isLoading ? "Enregistrement..." : "Enregistrer les modifications"}
                             </button>
                         </div>
                     )}
@@ -210,7 +210,7 @@ export default function LogementDetails() {
                         {isEditing && (
                             <div className="absolute bottom-4 right-4">
                                 <label className="bg-[#312b2b] hover:bg-[#3d3636] text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer">
-                                    <FiUpload /> Upload Image
+                                    <FiUpload /> Importer l’image
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -232,12 +232,12 @@ export default function LogementDetails() {
                                     <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                         <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
                                             <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">1</span>
-                                            Logement Information
+                                            Informations sur le logement
                                         </h3>
 
                                         <div className="space-y-5">
                                             <div className="form-group">
-                                                <label className="block text-sm font-medium mb-1 text-gray-300">Title</label>
+                                                <label className="block text-sm font-medium mb-1 text-gray-300">Titre</label>
                                                 <input
                                                     type="text"
                                                     name="title"
@@ -249,7 +249,7 @@ export default function LogementDetails() {
                                             </div>
 
                                             <div className="form-group">
-                                                <label className="block text-sm font-medium mb-1 text-gray-300">Property Type</label>
+                                                <label className="block text-sm font-medium mb-1 text-gray-300">Type de propriété</label>
                                                 <div className="relative">
                                                     <select
                                                         name="type"
@@ -286,14 +286,14 @@ export default function LogementDetails() {
                                     <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                         <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
                                             <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">2</span>
-                                            Pricing & Capacity
+                                            Prix et capacité
                                         </h3>
 
                                         <div className="space-y-5">
                                             <div className="form-group">
-                                                <label className="block text-sm font-medium mb-1 text-gray-300">Price Per Night (€)</label>
+                                                <label className="block text-sm font-medium mb-1 text-gray-300">Prix par nuit (DH)</label>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-3 text-gray-400">€</span>
+                                                    <span className="absolute left-3 top-3 text-gray-400"></span>
                                                     <input
                                                         type="number"
                                                         name="pricePerNight"
@@ -308,7 +308,7 @@ export default function LogementDetails() {
 
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="form-group">
-                                                    <label className="block text-sm font-medium mb-1 text-gray-300">Max Guests</label>
+                                                    <label className="block text-sm font-medium mb-1 text-gray-300">Capacité maximale</label>
                                                     <div className="relative">
                                                         <FiUsers className="absolute left-3 top-4 text-gray-400" />
                                                         <input
@@ -324,7 +324,7 @@ export default function LogementDetails() {
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label className="block text-sm font-medium mb-1 text-gray-300">Bedrooms</label>
+                                                    <label className="block text-sm font-medium mb-1 text-gray-300">Lits</label>
                                                     <div className="relative">
                                                         <FiHome className="absolute left-3 top-4 text-gray-400" />
                                                         <input
@@ -346,12 +346,12 @@ export default function LogementDetails() {
                                     <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                         <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
                                             <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">3</span>
-                                            Location Details
+                                            Détails de l’emplacement
                                         </h3>
 
                                         <div className="space-y-5">
                                             <div className="form-group">
-                                                <label className="block text-sm font-medium mb-1 text-gray-300">Street Address</label>
+                                                <label className="block text-sm font-medium mb-1 text-gray-300">Adresse de la rue</label>
                                                 <input
                                                     type="text"
                                                     name="street"
@@ -363,7 +363,7 @@ export default function LogementDetails() {
 
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="form-group">
-                                                    <label className="block text-sm font-medium mb-1 text-gray-300">City</label>
+                                                    <label className="block text-sm font-medium mb-1 text-gray-300">Ville</label>
                                                     <input
                                                         type="text"
                                                         name="city"
@@ -374,7 +374,7 @@ export default function LogementDetails() {
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label className="block text-sm font-medium mb-1 text-gray-300">Postal Code</label>
+                                                    <label className="block text-sm font-medium mb-1 text-gray-300">Code postale</label>
                                                     <input
                                                         type="text"
                                                         name="postalCode"
@@ -391,12 +391,12 @@ export default function LogementDetails() {
                                     <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                         <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
                                             <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">4</span>
-                                            Amenities
+                                            Équipements
                                         </h3>
 
                                         <div className="space-y-5">
                                             <div className="form-group">
-                                                <label className="block text-sm font-medium mb-1 text-gray-300">Select Amenities</label>
+                                                <label className="block text-sm font-medium mb-1 text-gray-300">Sélectionner les équipements</label>
 
                                                 {/* Available Amenities Checkboxes */}
                                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
@@ -431,7 +431,7 @@ export default function LogementDetails() {
 
                                             {/* Current Amenities Display */}
                                             <div className="space-y-2">
-                                                <h4 className="text-sm font-medium text-gray-300">Selected Amenities</h4>
+                                                <h4 className="text-sm font-medium text-gray-300">Équipements sélectionnés</h4>
                                                 {formData.equipement.length > 0 ? (
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                         {formData.equipement.map((item, index) => (
@@ -462,7 +462,7 @@ export default function LogementDetails() {
                                 <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                     <h3 className="text-xl font-bold mb-6 pb-2 border-b border-[#5a4f4f]/30 flex items-center">
                                         <span className="bg-[#312b2b]/10 text-[#312b2b] px-2 py-1 rounded-md mr-2">5</span>
-                                        Property Photos
+                                        Photos de la propriété
                                     </h3>
 
                                     <div className="space-y-5">
@@ -489,7 +489,7 @@ export default function LogementDetails() {
 
                                             <label className="w-full sm:w-48 h-48 flex flex-col items-center justify-center border-2 border-dashed border-[#5a4f4f]/30 rounded-lg cursor-pointer hover:border-[#312b2b]/50 transition-colors">
                                                 <FiUpload className="text-2xl text-gray-400 mb-2" />
-                                                <span className="text-sm text-gray-400">Upload Photo</span>
+                                                <span className="text-sm text-gray-400">Importer la photo</span>
                                                 <input
                                                     type="file"
                                                     accept="image/*"
@@ -498,7 +498,7 @@ export default function LogementDetails() {
                                                 />
                                             </label>
                                         </div>
-                                        <p className="text-xs text-gray-400">Recommended size: 1200x800px (max 10 photos)</p>
+                                        <p className="text-xs text-gray-400">Taille recommandée : 1200x800px (maximum 10 photos)</p>
                                     </div>
                                 </div>
 
@@ -509,7 +509,7 @@ export default function LogementDetails() {
                                         onClick={() => setIsEditing(false)}
                                         className="bg-[#262222] px-6 py-3 rounded-lg hover:bg-[#473e3e]/50 transition-colors"
                                     >
-                                        Cancel
+                                        Annuler
                                     </button>
                                     <button
                                         type="submit"
@@ -519,12 +519,12 @@ export default function LogementDetails() {
                                         {isLoading ? (
                                             <>
                                                 <FiLoader className="animate-spin" />
-                                                Saving...
+                                                Enregistrement en cours...
                                             </>
                                         ) : (
                                             <>
                                                 <FiSave />
-                                                Save Changes
+                                                Enregistrer les modifications
                                             </>
                                         )}
                                     </button>
@@ -538,19 +538,19 @@ export default function LogementDetails() {
                                     <div>
                                         <h2 className="text-3xl font-bold">{formData.title}</h2>
                                         <div className="flex items-center flex-wrap gap-2 mt-3">
-                                            <span className="bg-[#312b2b]/10 text-[#312b2b] px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                            <span className="bg-[#473e3e]/10 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
                                                 <FiHome className="mr-1" /> {formData.type}
                                             </span>
                                             <span className="bg-[#473e3e]/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-                                                <FiUsers className="mr-1" /> {formData.capacity} guests
+                                                <FiUsers className="mr-1" /> {formData.capacity} Voyageurs
                                             </span>
                                             <span className="bg-[#473e3e]/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-                                                <FiLayers className="mr-1" /> {formData.nombreOfChambres} bedrooms
+                                                <FiLayers className="mr-1" /> {formData.nombreOfChambres} Lits
                                             </span>
                                         </div>
                                     </div>
                                     <div className="text-3xl font-bold bg-[#312b2b]/10 px-4 py-3 rounded-lg">
-                                        {formData.pricePerNight}€ <span className="text-base font-normal text-gray-400">/ night</span>
+                                        {formData.pricePerNight}DH <span className="text-base font-normal text-gray-400">/ Nuit</span>
                                     </div>
                                 </div>
 
@@ -567,7 +567,7 @@ export default function LogementDetails() {
                                                 {index === 2 && formData.imagesBase64.length > 3 && (
                                                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                                                         <span className="text-white text-xl font-bold">
-                                                            +{formData.imagesBase64.length - 3} more
+                                                            +{formData.imagesBase64.length - 3} plus
                                                         </span>
                                                     </div>
                                                 )}
@@ -583,7 +583,7 @@ export default function LogementDetails() {
                                         {/* Description */}
                                         <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                                <FiAlignLeft className="text-[#312b2b]" />
+                                                <FiAlignLeft className="text-white" />
                                                 Description
                                             </h3>
                                             <p className="whitespace-pre-line text-gray-300">{formData.description || "No description provided"}</p>
@@ -593,14 +593,14 @@ export default function LogementDetails() {
                                         {formData.equipement.length > 0 && (
                                             <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                                    <FiCheckCircle className="text-[#312b2b]" />
-                                                    Amenities
+                                                    <FiCheckCircle className="text-white" />
+                                                    Equipements
                                                 </h3>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     {formData.equipement.map((item, index) => (
                                                         <div key={index} className="flex items-center gap-3">
                                                             <div className="bg-[#312b2b]/10 p-2 rounded-full">
-                                                                <FiCheck className="text-[#312b2b]" />
+                                                                <FiCheck className="text-white" />
                                                             </div>
                                                             <span className="text-gray-300 capitalize">{item}</span>
                                                         </div>
@@ -615,8 +615,8 @@ export default function LogementDetails() {
                                         {/* Location */}
                                         <div className="bg-[#262222] p-6 rounded-xl shadow-lg border border-[#5a4f4f]/20">
                                             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                                <FiMapPin className="text-[#312b2b]" />
-                                                Location
+                                                <FiMapPin className="text-white" />
+                                                Localisation
                                             </h3>
                                             <address className="not-italic space-y-2 text-gray-300">
                                                 <p className="flex items-center gap-2">

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { dakhl } from "../../services/Agence/authService";
 import { useNavigate } from "react-router-dom";
 import SidebarCommerciale from "../../components/CommercialeDash/SidebarCommerciale";
+import Chart from "../CommercialeDash/dash";
 
 export default function CommercialeDash() {
   const navigate = useNavigate();
@@ -39,9 +40,8 @@ export default function CommercialeDash() {
             )}>
         <div>
           <Topbar theme={theme} setTheme={setTheme} />
-          <KPIWidgets />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-8 mb-8">
-            <ChartCard />
+            <Chart />
             <NotificationsCard />
           </div>
           <EmployeeTable />

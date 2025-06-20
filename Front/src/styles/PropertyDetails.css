@@ -1,0 +1,131 @@
+/* Calendar Styles */
+.calendar-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  color: #555;
+}
+
+.calendar-nav-button:hover {
+  background-color: #f5f5f5;
+}
+
+.calendar-month-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.5rem;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  padding: 0.5rem 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  margin: 0 auto;
+}
+
+.calendar-day:hover:not(.disabled) {
+  background-color: #fd8d3e;
+}
+
+.calendar-day.selected {
+  background-color: #ff6a00;
+  color: white;
+  font-weight: 500;
+  transform: none;
+}
+
+.calendar-day.in-range:not(.selected) {
+  background-color: rgba(255, 56, 92, 0.1);
+  border-radius: 0;
+}
+
+.calendar-day.in-range.start-date {
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+  margin-right: 0;
+}
+
+.calendar-day.in-range.end-date {
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  margin-left: 0;
+}
+
+.calendar-day.in-range:not(.start-date):not(.end-date) {
+  border-radius: 0;
+  margin: 0;
+}
+
+.calendar-day.disabled {
+  color: #ddd;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.calendar-day.empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.calendar-day.today:not(.selected) {
+  font-weight: 600;
+  color: #ff385c;
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: 1rem;
+  }
+  
+  .calendar-day {
+    height: 32px;
+    width: 32px;
+    font-size: 0.75rem;
+  }
+}

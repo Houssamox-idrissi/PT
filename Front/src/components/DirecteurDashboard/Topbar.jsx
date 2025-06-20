@@ -22,12 +22,7 @@ export default function Topbar({ theme, setTheme }) {
           <div className="text-lg font-semibold">Bienvenue, {userName}</div>
         </div>
       </div>
-      <button
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#d1671b] text-[#d1671b] hover:bg-[#d1671b] hover:text-white transition"
-      >
-        {theme === "dark" ? <FiSun /> : <FiMoon />} {theme === "dark" ? "Mode clair" : "Mode sombre"}
-      </button>
+      
     </div>
   );
 } 

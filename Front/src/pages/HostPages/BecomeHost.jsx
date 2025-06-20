@@ -23,8 +23,8 @@ export default function BecomeHost() {
             {/* Left Column */}
             <div className="space-y-16">
               <h1 className="text-[48px] font-medium text-gray-900 leading-[1.1]">
-                Devenez hôte sur<br />
-                Holi Square en 3 étapes
+                Création logement  <br />
+                 Square Holi
               </h1>
 
               {/* Steps */}
@@ -39,7 +39,7 @@ export default function BecomeHost() {
                       Décrivez votre espace
                     </h2>
                     <p className="text-gray-600 text-lg leading-relaxed">
-                      Partagez les détails essentiels de votre logement : localisation, capacité d'accueil, et équipements disponibles.
+                      Partagez les détails essentiels de votre logement : Type de logement, et capacité d'accueil.
                     </p>
                   </div>
                 </div>
@@ -54,7 +54,7 @@ export default function BecomeHost() {
                       Créez une annonce attractive
                     </h2>
                     <p className="text-gray-600 text-lg leading-relaxed">
-                      Mettez en valeur votre logement avec des photos de qualité, un titre accrocheur et une description détaillée.
+                      Mettez en valeur votre logement avec des photos de qualité, un titre accrocheur, une description détaillée,équipements disponibles et la localisation du logement .
                     </p>
                   </div>
                 </div>
@@ -69,7 +69,7 @@ export default function BecomeHost() {
                       Lancez votre activité
                     </h2>
                     <p className="text-gray-600 text-lg leading-relaxed">
-                      Définissez vos tarifs, configurez votre calendrier et publiez votre annonce pour commencer à recevoir des réservations.
+                      Définissez vos tarifs, et publiez votre annonce pour commencer à recevoir des réservations.
                     </p>
                   </div>
                 </div>

@@ -97,7 +97,7 @@ const LogementCard = ({ logement, onDeleteSuccess }) => {
             {logement.title}
           </h2>
           <span className="text-lg font-bold">
-            {logement.pricePerNight}€
+            {logement.pricePerNight}DH
           </span>
         </div>
 
@@ -110,7 +110,7 @@ const LogementCard = ({ logement, onDeleteSuccess }) => {
             onClick={() => navigate(`/logement-details/${logement.id}`)}
             className={`flex-1 ${colors.primary} ${colors.hover} ${colors.text} py-2 rounded-lg flex items-center justify-center gap-2 transition-colors`}
           >
-            View Details <FiArrowRight />
+            Voir détail <FiArrowRight />
           </button>
         </div>
       </div>

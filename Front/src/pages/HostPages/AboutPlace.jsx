@@ -31,7 +31,7 @@ export default function BecomeHost() {
 
               <p className="text-gray-600 text-lg leading-relaxed max-w-xl">
                 Commencez par nous décrire votre bien immobilier. Indiquez s'il s'agit d'un appartement complet,
-                d'une maison entière ou d'une chambre privée. Précisez sa localisation exacte et le nombre de
+                d'une maison entière ou d'une chambre privée. Précisez le nombre de
                 personnes que vous pouvez accueillir confortablement. Ces informations nous aideront à mieux
                 présenter votre offre aux voyageurs.
               </p>
@@ -42,19 +42,14 @@ export default function BecomeHost() {
                     <svg className="w-6 h-6 text-orange-600 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-gray-600">Description détaillée de votre logement</span>
+                    <span className="text-gray-600">Type de votre logement</span>
                   </li>
+                
                   <li className="flex items-start gap-3">
                     <svg className="w-6 h-6 text-orange-600 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-gray-600">Localisation précise pour les voyageurs</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <svg className="w-6 h-6 text-orange-600 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-600">Capacité d'accueil et équipements disponibles</span>
+                    <span className="text-gray-600">Capacité d'accueil</span>
                   </li>
                 </ul>
               </div>

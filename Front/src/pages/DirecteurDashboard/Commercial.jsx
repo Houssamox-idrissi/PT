@@ -16,6 +16,9 @@ import LoadingScreen from "../../components/loading/loadin";
 
 export default function Commercial() {
   const navigate = useNavigate();
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedCommercialId, setSelectedCommercialId] = useState(null);
+
   const [search, setSearch] = useState("");
   const [theme, setTheme] = useState("dark");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -23,10 +26,12 @@ export default function Commercial() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
-    lastName : "",
+    lastName: "",
     email: "",
     password: "",
     role: "COMMERCIAL",
@@ -38,14 +43,14 @@ export default function Commercial() {
   //T2akd mn auth
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('token');
       if (!token) {
-        navigate('/login'); 
+        navigate('/login');
       }
     };
-  
+
     checkAuth();
-  }, [navigate]); 
+  }, [navigate]);
 
   const fetchEmployeesByCommercials = async () => {
     try {
@@ -70,10 +75,13 @@ export default function Commercial() {
       fetchEmployeesByCommercials();
       setShowModal(false);
       resetForm();
+      setSuccessMessage("Le commercial a été ajouté avec succès !");
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       setError(err.message);
     }
   };
+
 
   const handleUpdateCommercial = async (e) => {
     e.preventDefault();
@@ -92,11 +100,14 @@ export default function Commercial() {
       try {
         await deleteEmployee(id);
         fetchEmployeesByCommercials();
+        setSuccessMessage("Le commercial a été supprimé avec succès !");
+        setTimeout(() => setSuccessMessage(""), 3000);
       } catch (err) {
         setError(err.message);
       }
     }
   };
+
 
   const handleEditClick = (commercial) => {
     setEditingId(commercial.id);
@@ -147,6 +158,8 @@ export default function Commercial() {
       theme === "dark" ? "bg-[#1a1818] text-[#f7f6f5]" : "bg-[#f7f6f5] text-[#0a0400]",
       "min-h-screen flex"
     )}>
+
+
       <Sidebar
         activeRoute="Commercial"
         theme={theme}
@@ -157,6 +170,11 @@ export default function Commercial() {
         "mt-10 flex-1 flex flex-col min-h-screen transition-all duration-300",
         sidebarCollapsed ? "pl-20" : "pl-58"
       )}>
+        {successMessage && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded-lg shadow-md transition-all duration-300">
+            {successMessage}
+          </div>
+        )}
         <div className="px-8 py-10">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-8">
             <form

@@ -4,18 +4,18 @@ import { FiCheckCircle, FiHeadphones, FiCalendar } from 'react-icons/fi';
 export default function Features() {
   const features = [
     {
-      name: 'Verified Properties',
-      description: 'All listings are carefully vetted to ensure quality',
+      name: 'Biens Vérifiés',
+      description: 'Toutes les annonces sont soigneusement vérifiées pour garantir la qualité.',
       icon: <FiCheckCircle className="h-6 w-6" />
     },
     {
-      name: '24/7 Support',
-      description: 'Our team is always available to assist you',
+      name: 'Support 24/7',
+      description: 'Notre équipe est disponible à tout moment pour vous assister.',
       icon: <FiHeadphones className="h-6 w-6" />
     },
     {
-      name: 'Easy Booking',
-      description: 'Simple and secure booking process',
+      name: 'Réservation Facile',
+      description: 'Un processus de réservation simple et sécurisé.',
       icon: <FiCalendar className="h-6 w-6" />
     }
   ];
@@ -52,10 +52,10 @@ export default function Features() {
           className="lg:text-center mb-16"
         >
           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            Why Choose Holi Square 
+            Pourquoi Choisir Holi Square
           </h2>
           <p className="mt-4 max-w-2xl text-xl text-gray-600 mx-auto">
-            Premium features for your perfect stay
+            Des fonctionnalités premium pour un séjour parfait
           </p>
         </motion.div>
 

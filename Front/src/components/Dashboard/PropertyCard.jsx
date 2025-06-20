@@ -1,12 +1,18 @@
 import React from 'react';
 import { FiHeart } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 export default function PropertyCard({ property }) {
+  const navigate = useNavigate();
+
   // Add fallbacks for missing data
   if (!property) return null;
 
   return (
-    <div className="group relative">
+    <div
+      className="group relative cursor-pointer"
+      onClick={() => navigate(`/property/${property.id}`)}
+    >
       {/* Image Container */}
       <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
         {property.imagesBase64?.[0] ? (
@@ -22,15 +28,25 @@ export default function PropertyCard({ property }) {
         )}
 
         {/* Favorite Button */}
-        <button className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform duration-200">
-          <FiHeart className="w-5 h-5 text-gray-700" />
-        </button>
-
+        <button
+  className="absolute top-3 right-3 p-2 hover:scale-110 transition-transform duration-200 bg-transparent"
+  onClick={e => {
+    e.stopPropagation();
+    // Add your favorite toggle logic here
+  }}
+>
+  <FiHeart 
+    className="w-5 h-5" 
+    fill="#3d3b38" 
+    stroke="white" 
+    strokeWidth="1.5"
+  />
+</button>
         {/* Image Navigation Dots */}
         {property.imagesBase64?.length > 1 && (
           <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
             {property.imagesBase64.map((_, index) => (
-              <div 
+              <div
                 key={index}
                 className={`w-2 h-2 rounded-full ${index === 0 ? 'bg-white' : 'bg-white/50'}`}
               ></div>
@@ -60,7 +76,7 @@ export default function PropertyCard({ property }) {
 
         <div className="mt-3">
           <span className="text-lg font-semibold text-gray-900">
-            {property.pricePerNight ? `${property.pricePerNight} DH` : 'Price not available'}
+            {property.pricePerNight ? `${property.pricePerNight} ` : 'Price not available'}
           </span>
           {property.pricePerNight && <span className="text-gray-500"> par nuit</span>}
         </div>

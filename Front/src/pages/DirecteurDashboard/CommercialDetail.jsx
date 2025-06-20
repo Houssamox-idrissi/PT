@@ -20,6 +20,13 @@ export default function CommercialDetail() {
     const [logements, setLogements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    // Add this function inside CommercialDetail
+    const handleDeleteSuccess = (deletedId) => {
+        setLogements((prevLogements) =>
+            prevLogements.filter((logement) => logement.id !== deletedId)
+        );
+    };
+
 
     useEffect(() => {
         const checkAuth = () => {
@@ -39,7 +46,7 @@ export default function CommercialDetail() {
                 const commercialData = await getEmployeeById(id);
                 setCommercial(commercialData);
 
-                const logementsData = await getLogementsByCommercialId(id); 
+                const logementsData = await getLogementsByCommercialId(id);
                 setLogements(Array.isArray(logementsData) ? logementsData : []);
             } catch (error) {
                 setError(error.message);
@@ -149,8 +156,10 @@ export default function CommercialDetail() {
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {logements.map(logement => (
-                                    <LogementCard key={logement.id} logement={logement} />
-                                    
+                                    <LogementCard key={logement.id} logement={logement}
+                                        onDeleteSuccess={() => handleDeleteSuccess(logement.id)}
+                                    />
+
                                 ))}
                             </div>
                         )}

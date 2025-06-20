@@ -11,7 +11,7 @@ export const registerEmployee = async (formData) => {
     lastName: formData.lastName.trim(),
     email: formData.email.trim(),
     password: formData.password,
-    role: formData.role,
+    role: "COMMERCIAL",
     agenceId: formData.agenceId,
   };
 

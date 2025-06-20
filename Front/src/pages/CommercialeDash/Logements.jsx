@@ -124,7 +124,7 @@ export default function Logements() {
                       logements.length
                   )
                 : 0}{" "}
-              €
+              MAD
             </p>
           </div>
         </div>

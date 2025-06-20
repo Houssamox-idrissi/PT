@@ -45,7 +45,7 @@ export default function AgencyRegistrationPage() {
 
       const agency = await registerAgency(formData);
       localStorage.setItem("agency", JSON.stringify(agency));
-      navigate("/DirecteurDashboard");
+      navigate("/agency/login");
 
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Une erreur est survenue");
@@ -89,7 +89,7 @@ export default function AgencyRegistrationPage() {
             <div className="space-y-4">
               {[
                 "Gérez plusieurs propriétés",
-                "Suivez les performances des agents",
+                "Suivez les performances des commerciaux",
                 "Accédez à des analyses détaillées",
                 "Recevez des notifications en temps réel",
                 "Support client 24/7"

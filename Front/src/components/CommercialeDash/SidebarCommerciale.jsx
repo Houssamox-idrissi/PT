@@ -10,7 +10,7 @@ import { logout } from "../../services/Agence/authService";
 import { jwtDecode } from "jwt-decode";
 
 export default function SidebarCommerciale({
-  activeRoute = "dashboard",
+  activeRoute = "Logements",
   onRouteChange,
   theme = "dark",
   collapsed,
